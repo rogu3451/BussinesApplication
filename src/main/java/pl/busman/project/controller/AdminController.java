@@ -6,7 +6,12 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import pl.busman.project.model.Project;
+import pl.busman.project.model.Role;
+import pl.busman.project.model.SystemUser;
+import pl.busman.project.model.dto.UserWithRole;
 import pl.busman.project.service.ProjectService;
+import pl.busman.project.service.RoleService;
+import pl.busman.project.service.SystemUserService;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -18,10 +23,11 @@ public class AdminController {
     @Autowired
     ProjectService projectService;
 
-    @GetMapping("")
-    public String login(){
-        return "login";
-    }
+    @Autowired
+    SystemUserService systemUserService;
+
+    @Autowired
+    RoleService roleService;
 
     @GetMapping("/addProject")
     public String addProject(Model model){
@@ -73,6 +79,64 @@ public class AdminController {
     public String deleteProject(@PathVariable("id") Long id){
         projectService.deleteProject(id);
         return "redirect:/admin/allProjects";
+    }
+
+    @GetMapping("/addUser")
+    public String addUserToDB(Model model){
+        UserWithRole userWithRole = new UserWithRole();
+        model.addAttribute("userWithRole", userWithRole);
+        return "admin/addUser";
+    }
+
+    @PostMapping("/addUser")
+    public String addUser(UserWithRole userWithRole, BindingResult bindingResult, Model model){
+
+        if(bindingResult.hasErrors()) {
+            System.out.println("There were errors");
+            bindingResult.getAllErrors().forEach(error -> {
+                System.out.println(error.getObjectName() + " " + error.getDefaultMessage());
+            });
+            model.addAttribute("invalidPassword","Invalid password. Password should have minimum 6 characters, one  uppercase letter and one digit.");
+            return "admin/addUser";
+        }
+        else{
+
+                if(userWithRole.getSystemUser().getId()==null)
+                {
+                        try{
+                            systemUserService.addSystemUser(userWithRole.getSystemUser());
+                            userWithRole.getRole().setUsername(userWithRole.getSystemUser().getUsername());
+                            roleService.addRole(userWithRole.getRole());
+                            UserWithRole userWithRoleEmpty = new UserWithRole();
+                            model.addAttribute("userWithRole", userWithRoleEmpty);
+                            model.addAttribute("message","The user has been added.");
+                        }catch (Exception e){
+                                if(SystemUser.validatePassword(userWithRole.getSystemUser().getPassword()))
+                                {
+                                model.addAttribute("incorrectUsername", "Username already exist!");
+                                }else{
+                                model.addAttribute("incorrectUsername","Username should be between 5 and 20 characters.");
+                                }
+                        }
+                }else{
+                    try{
+                        roleService.addRole(userWithRole.getRole());
+                        systemUserService.addSystemUser(userWithRole.getSystemUser());
+                        model.addAttribute("message","The user has been modified.");
+                    }catch (Exception e){
+                        model.addAttribute("incorrectUsername","Username should be between 5 and 20 characters.");
+                    }
+
+                    }
+                }
+        return "admin/addUser";
+    }
+
+    @GetMapping("/allUsers")
+    public String allUsers(Model model){
+        List<SystemUser> allSystemUsers = systemUserService.getAllSystemUsers();
+        model.addAttribute("systemUsers", allSystemUsers);
+        return "admin/allUsers";
     }
 
 }

@@ -3,8 +3,8 @@ package pl.busman.project.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import pl.busman.project.exception.ProjectError;
-import pl.busman.project.exception.ProjectException;
+import pl.busman.project.exception.ProjectException.ProjectError;
+import pl.busman.project.exception.ProjectException.ProjectException;
 import pl.busman.project.model.Project;
 import pl.busman.project.repository.ProjectRespository;
 

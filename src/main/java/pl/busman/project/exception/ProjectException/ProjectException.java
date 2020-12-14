@@ -1,4 +1,4 @@
-package pl.busman.project.exception;
+package pl.busman.project.exception.ProjectException;
 
 public class ProjectException extends RuntimeException {
 

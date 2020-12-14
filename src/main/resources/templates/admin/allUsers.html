@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="admin/adminNavbar :: html_head">
+</head>
+<body>
+<div th:replace="admin/adminNavbar :: navbar"></div>
+<div class="container" style="min-height: 82.5vh;">
+    <h3>All projects</h3>
+    <table class="table">
+        <thead>
+        <tr>
+            <td>Id</td>
+            <td>Username</td>
+            <td>Password</td>
+            <td></td>
+            <td></td>
+        </tr>
+        </thead>
+        <tbody th:each = "systemUser : ${systemUsers}">
+        <tr>
+            <td th:text="${systemUser.id}"></td>
+            <td th:text="${systemUser.username}"></td>
+            <td th:text="${systemUser.password}"></td>
+            <td><a th:href="${'/admin/addUser/'+systemUser.id}">Edit</a></td>
+            <td><a onclick="alert('Are you sure that you want to delete the project ?')" th:href="${'/admin/deleteUser/'+systemUser.id}">Delete</a></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div th:replace="footer :: footer"></div>
+</body>
+</html>

@@ -1,6 +1,4 @@
-package pl.busman.project.exception;
-
-import pl.busman.project.model.Project;
+package pl.busman.project.exception.ProjectException;
 
 public enum ProjectError {
     PROJECT_NOT_FOUND("Project does not exist");
