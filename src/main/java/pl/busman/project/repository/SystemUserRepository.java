@@ -23,7 +23,7 @@ public interface SystemUserRepository extends JpaRepository<SystemUser,Long> {
     Collection<UsersWithRoleQuery> getAllUsersWithRole();
 
 
-    @Query("SELECT new pl.busman.project.model.dto.UsersWithRoleQuery(user.id, user.username, role.role) FROM SystemUser user " +
+    @Query("SELECT new pl.busman.project.model.dto.UsersWithRoleQuery(user.id, user.username, role.role, role.id) FROM SystemUser user " +
             "INNER JOIN Role role " +
             "ON user.username = role.username " +
             "WHERE user.id = :idFromClient ")

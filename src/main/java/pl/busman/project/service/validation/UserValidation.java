@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import pl.busman.project.model.dto.UserWithRole;
+import pl.busman.project.model.dto.UsersWithRoleQuery;
 import pl.busman.project.service.SystemUserService;
 
 @Component
@@ -29,6 +30,34 @@ public class UserValidation {
 
         if(checkIfUsernameExist(userWithRole.getSystemUser().getUsername())){
             model.addAttribute("usernameAllreadyExist","Username allready exist.");
+            errors++;
+        }
+
+        if(errors!=0){
+            return false; // something went wrong
+        }else{
+            return true; // validation correct
+        }
+
+    }
+
+    public boolean validateUser(UsersWithRoleQuery usersWithRoleQuery, BindingResult bindingResult, Model model) { // used while modified
+
+        int errors = 0;
+
+        if(!usersWithRoleQuery.getPassword().isEmpty()){
+            try{
+                validatePassword(usersWithRoleQuery.getPassword());
+            }catch (Exception e){
+                errors++;
+                model.addAttribute("invalidPassword","Invalid password. " +
+                        "Password should have minimum 6 characters, one  uppercase letter and one digit.");
+            }
+        }
+
+
+        if(!checkLengthOfUsername(usersWithRoleQuery.getUsername())){
+            model.addAttribute("incorrectLengthOfUsername","Username should be between 5 and 20 characters.");
             errors++;
         }
 

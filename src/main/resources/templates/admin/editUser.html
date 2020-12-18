@@ -8,11 +8,12 @@
 
     <h3>Edit user with id = <span th:text="${userFromDb.id}"></span></h3>
 
-    <form class="form-horizontal" th:object="${userFromDb}" th:action="@{/admin/addUser}" th:method="post">
+    <form class="form-horizontal" th:object="${userFromDb}" th:action="@{'/admin/editUser/'+${userFromDb.id}}" th:method="post">
 
         <div class="form-group">
             <label class="control-label">Username:</label>
             <input type="hidden" class="form-control" th:field="*{id}"/><!-- getSystemUser() = systemUser -->
+            <input type="hidden" class="form-control" th:field="*{role_id}"/><!-- getSystemUser() = systemUser -->
             <input type="text" class="form-control" th:field="*{username}"/>
              <p class="alert alert-danger" th:if="${incorrectLengthOfUsername}" th:text="${incorrectLengthOfUsername}"/>
             <p class="alert alert-danger" th:if="${usernameAllreadyExist}" th:text="${usernameAllreadyExist}"/>

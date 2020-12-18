@@ -22,5 +22,7 @@ public interface SystemUserService {
 
     UsersWithRoleQuery getAllUserWithRoleById(Long id);
 
+    SystemUser createSystemUser(UsersWithRoleQuery usersWithRoleQuery);
+
 }
 

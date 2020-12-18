@@ -1,5 +1,6 @@
 package pl.busman.project.model;
 
+import lombok.Builder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import pl.busman.project.service.validation.UserValidation;
 
@@ -33,11 +34,30 @@ public class SystemUser {
     public SystemUser() {
     }
 
-    public SystemUser(String username, String password) throws Exception{
-        UserValidation.validatePassword(password);
-        String encodedPassword = encodePassword(password);
+    public SystemUser(Long id, String username) {
+        this.id = id;
         this.username=username;
-        this.password=encodedPassword;
+        this.enabled=true;
+    }
+
+    public SystemUser(Long id, String username, String password) throws Exception{
+        if(password!=null){
+            UserValidation.validatePassword(password);
+            String encodedPassword = encodePassword(password);
+            this.password=encodedPassword;
+        }
+        this.id = id;
+        this.username=username;
+        this.enabled=true;
+    }
+
+    public SystemUser(String username, String password) throws Exception{
+        if(password!=null){
+            UserValidation.validatePassword(password);
+            String encodedPassword = encodePassword(password);
+            this.password=encodedPassword;
+        }
+        this.username=username;
         this.enabled=true;
     }
 

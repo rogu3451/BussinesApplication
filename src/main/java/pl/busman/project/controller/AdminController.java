@@ -6,6 +6,8 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import pl.busman.project.model.Project;
+import pl.busman.project.model.Role;
+import pl.busman.project.model.SystemUser;
 import pl.busman.project.model.dto.UserWithRole;
 import pl.busman.project.model.dto.UsersWithRoleQuery;
 import pl.busman.project.service.ProjectService;
@@ -48,13 +50,13 @@ public class AdminController {
 
     @PostMapping("/addProject")
     public String addProject(@Valid Project project, BindingResult bindingResult, Model model){
-        if(bindingResult.hasErrors()){
-            System.out.println("There were errors");
-            bindingResult.getAllErrors().forEach(error -> {
-                System.out.println(error.getObjectName() + " " + error.getDefaultMessage()  );
-            });
-            return "admin/addProject";
-        }else {
+            if(bindingResult.hasErrors()){
+                System.out.println("There were errors");
+                bindingResult.getAllErrors().forEach(error -> {
+                    System.out.println(error.getObjectName() + " " + error.getDefaultMessage()  );
+                });
+                return "admin/addProject";
+            }else {
 
 
             if(project.getId()==null){
@@ -119,10 +121,33 @@ public class AdminController {
 
     @GetMapping("/editUser/{id}")
     public String editUser(@PathVariable("id") Long id, Model model){
+
         UsersWithRoleQuery usersWithRoleQuery = systemUserService.getAllUserWithRoleById(id);
-        System.out.println(usersWithRoleQuery);
         model.addAttribute("userFromDb", usersWithRoleQuery);
         return "/admin/editUser";
+
+    }
+
+    @PostMapping("/editUser/{id}")
+    public String editUser(UsersWithRoleQuery usersWithRoleQuery, BindingResult bindingResult, Model model){
+
+        if(userValidation.validateUser(usersWithRoleQuery, bindingResult, model)){
+            SystemUser systemUserToEdit = systemUserService.createSystemUser(usersWithRoleQuery);
+            systemUserService.addSystemUser(systemUserToEdit);
+
+            Role roleToEdit = roleService.createRole(usersWithRoleQuery);
+            roleService.addRole(roleToEdit);
+            roleService.addRole(roleToEdit);
+
+            model.addAttribute("userFromDb", usersWithRoleQuery);
+            model.addAttribute("successMessage","The user has been modified.");
+            return "/admin/editUser";
+        } else {
+            model.addAttribute("userFromDb", usersWithRoleQuery);
+            model.addAttribute("errorMessage","There were errors.");
+            return "/admin/editUser";
+        }
+
     }
 
 }

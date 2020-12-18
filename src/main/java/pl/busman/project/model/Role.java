@@ -20,6 +20,12 @@ public class Role {
     public Role() {
     }
 
+    public Role(Long id, String username, String role) {
+        this.username = username;
+        this.role = role;
+        this.id = id;
+    }
+
     public Role(String username, String role){
         this.username = username;
         this.role = role;
