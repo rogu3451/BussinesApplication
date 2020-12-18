@@ -20,5 +20,7 @@ public interface SystemUserService {
 
     boolean checkIfUsernameExist(String username);
 
+    UsersWithRoleQuery getAllUserWithRoleById(Long id);
+
 }
 

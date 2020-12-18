@@ -62,6 +62,10 @@ public class SystemUserServiceImpl implements SystemUserService {
     public boolean checkIfUsernameExist(String username) {
         return systemUserRepository.existsByUsername(username);
     }
+
+    public UsersWithRoleQuery getAllUserWithRoleById(Long id) {
+        return systemUserRepository.getAllUserWithRoleById(id);
+    }
 }
 
 
