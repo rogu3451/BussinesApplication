@@ -11,7 +11,7 @@
         <tr>
             <td>Id</td>
             <td>Username</td>
-            <td>Password</td>
+            <td>Role</td>
             <td></td>
             <td></td>
         </tr>
@@ -20,7 +20,7 @@
         <tr>
             <td th:text="${systemUser.id}"></td>
             <td th:text="${systemUser.username}"></td>
-            <td th:text="${systemUser.password}"></td>
+            <td th:text="${systemUser.role}"></td>
             <td><a th:href="${'/admin/addUser/'+systemUser.id}">Edit</a></td>
             <td><a onclick="alert('Are you sure that you want to delete the project ?')" th:href="${'/admin/deleteUser/'+systemUser.id}">Delete</a></td>
         </tr>

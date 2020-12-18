@@ -10,6 +10,7 @@ import pl.busman.project.exception.SystemUserException.SystemUserError;
 import pl.busman.project.exception.SystemUserException.SystemUserException;
 import pl.busman.project.model.Project;
 import pl.busman.project.model.SystemUser;
+import pl.busman.project.model.dto.UsersWithRoleQuery;
 import pl.busman.project.repository.SystemUserRepository;
 
 import java.util.List;
@@ -20,8 +21,8 @@ public class SystemUserServiceImpl implements SystemUserService {
     @Autowired
     SystemUserRepository systemUserRepository;
 
-    public List<SystemUser> getAllSystemUsers() {
-        return systemUserRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
+    public List<UsersWithRoleQuery> getAllUsersWithRole() {
+        return (List<UsersWithRoleQuery>)systemUserRepository.getAllUsersWithRole();
     }
 
     public void addSystemUser(SystemUser systemUser) {

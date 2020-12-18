@@ -9,6 +9,7 @@ import pl.busman.project.model.Project;
 import pl.busman.project.model.Role;
 import pl.busman.project.model.SystemUser;
 import pl.busman.project.model.dto.UserWithRole;
+import pl.busman.project.model.dto.UsersWithRoleQuery;
 import pl.busman.project.service.ProjectService;
 import pl.busman.project.service.RoleService;
 import pl.busman.project.service.SystemUserService;
@@ -162,8 +163,8 @@ public class AdminController {
 
     @GetMapping("/allUsers")
     public String allUsers(Model model){
-        List<SystemUser> allSystemUsers = systemUserService.getAllSystemUsers();
-        model.addAttribute("systemUsers", allSystemUsers);
+        List<UsersWithRoleQuery> allSystemUsersWithRole = systemUserService.getAllUsersWithRole();
+        model.addAttribute("systemUsers", allSystemUsersWithRole);
         return "admin/allUsers";
     }
 
