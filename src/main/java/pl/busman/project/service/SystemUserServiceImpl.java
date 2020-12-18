@@ -56,6 +56,11 @@ public class SystemUserServiceImpl implements SystemUserService {
             systemUserRepository.delete(systemUser);
         }
     }
+
+
+    public boolean checkIfUsernameExist(String username) {
+        return systemUserRepository.existsByUsername(username);
+    }
 }
 
 

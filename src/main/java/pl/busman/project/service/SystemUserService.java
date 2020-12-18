@@ -17,5 +17,7 @@ public interface SystemUserService {
 
     void deleteSystemUser(Long id);
 
+    boolean checkIfUsernameExist(String username);
+
 }
 

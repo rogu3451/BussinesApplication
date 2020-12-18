@@ -12,6 +12,7 @@ import pl.busman.project.model.dto.UserWithRole;
 import pl.busman.project.service.ProjectService;
 import pl.busman.project.service.RoleService;
 import pl.busman.project.service.SystemUserService;
+import pl.busman.project.service.validation.UserValidation;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -28,6 +29,9 @@ public class AdminController {
 
     @Autowired
     RoleService roleService;
+
+    @Autowired
+    UserValidation userValidation;
 
     @GetMapping("/addProject")
     public String addProject(Model model){
@@ -91,11 +95,33 @@ public class AdminController {
     @PostMapping("/addUser")
     public String addUser(UserWithRole userWithRole, BindingResult bindingResult, Model model){
 
-        if(bindingResult.hasErrors()) {
+        if(userValidation.validateUser(userWithRole, bindingResult, model)){
+            systemUserService.addSystemUser(userWithRole.getSystemUser());
+            userWithRole.getRole().setUsername(userWithRole.getSystemUser().getUsername());
+            roleService.addRole(userWithRole.getRole());
+            model.addAttribute("successMessage","The user has been added.");
+            UserWithRole userWithRoleEmpty = new UserWithRole();  // to clean form
+            model.addAttribute("userWithRole", userWithRoleEmpty);
+            return "admin/addUser";
+        } else {
+            model.addAttribute("userWithRole", userWithRole);
+            model.addAttribute("errorMessage","There were errors.");
+            return "admin/addUser";
+        }
+
+
+
+
+
+
+
+
+        /*if(bindingResult.hasErrors()) {
             System.out.println("There were errors");
             bindingResult.getAllErrors().forEach(error -> {
                 System.out.println(error.getObjectName() + " " + error.getDefaultMessage());
             });
+            model.addAttribute("userWithRole", userWithRole);
             model.addAttribute("invalidPassword","Invalid password. Password should have minimum 6 characters, one  uppercase letter and one digit.");
             return "admin/addUser";
         }
@@ -113,9 +139,11 @@ public class AdminController {
                         }catch (Exception e){
                                 if(SystemUser.validatePassword(userWithRole.getSystemUser().getPassword()))
                                 {
-                                model.addAttribute("incorrectUsername", "Username already exist!");
+                                    model.addAttribute("userWithRole", userWithRole);
+                                    model.addAttribute("incorrectUsername", "Username already exist!");
                                 }else{
-                                model.addAttribute("incorrectUsername","Username should be between 5 and 20 characters.");
+                                    model.addAttribute("userWithRole", userWithRole);
+                                    model.addAttribute("incorrectUsername","Username should be between 5 and 20 characters.");
                                 }
                         }
                 }else{
@@ -128,8 +156,8 @@ public class AdminController {
                     }
 
                     }
-                }
-        return "admin/addUser";
+                }*/
+
     }
 
     @GetMapping("/allUsers")

@@ -1,6 +1,8 @@
 package pl.busman.project.model;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import pl.busman.project.service.validation.UserValidation;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -17,7 +19,6 @@ public class SystemUser {
     private Long id;
 
     @Column(unique=true)
-    @Size(min=5, max=20, message = "Username should be between 5 and 20 characters")
     private String username;
 
     @NotNull
@@ -33,7 +34,7 @@ public class SystemUser {
     }
 
     public SystemUser(String username, String password) throws Exception{
-        validatePassword(password);
+        UserValidation.validatePassword(password);
         String encodedPassword = encodePassword(password);
         this.username=username;
         this.password=encodedPassword;
@@ -65,29 +66,10 @@ public class SystemUser {
     }
 
     public void setPassword(String password) throws Exception{
-        validatePassword(password);
+        UserValidation.validatePassword(password);
         String encodedPassword = encodePassword(password);
         this.password = encodedPassword;
         this.enabled=true;
-    }
-
-    public static boolean validatePassword(String passwordToCheck){
-        int upperCase = 0;
-        int isDigit = 0;
-
-        for (int k = 0; k < passwordToCheck.length(); k++) {
-            if (Character.isDigit(passwordToCheck.charAt(k))) isDigit++;
-            if (Character.isUpperCase(passwordToCheck.charAt(k))) upperCase++;
-        }
-
-        if ((passwordToCheck.length() < 6) || (upperCase < 1) || (isDigit < 1)){
-            throw new IllegalArgumentException("Invalid password. Password should have minimum 6 characters, one  uppercase letter and one digit");
-        }
-        else{
-            System.out.println("Valid password.");
-            return true;
-        }
-
     }
 
 }
