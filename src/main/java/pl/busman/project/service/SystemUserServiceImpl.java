@@ -25,6 +25,9 @@ public class SystemUserServiceImpl implements SystemUserService {
     @Autowired
     RoleRepository roleRepository;
 
+    @Autowired
+    RoleService roleService;
+
     public List<UsersWithRoleQuery> getAllUsersWithRole() {
         return (List<UsersWithRoleQuery>)systemUserRepository.getAllUsersWithRole();
     }
@@ -63,6 +66,7 @@ public class SystemUserServiceImpl implements SystemUserService {
         SystemUser systemUser = systemUserRepository.findById(id).orElseThrow(()-> new SystemUserException(SystemUserError.USER_NOT_FOUND));
         if(systemUser!=null){
             systemUserRepository.delete(systemUser);
+            roleService.deleteRole(roleRepository.getIdByUsername(systemUser.getUsername()));
         }
     }
 

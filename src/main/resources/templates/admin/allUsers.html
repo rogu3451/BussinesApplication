@@ -22,7 +22,7 @@
             <td th:text="${systemUser.username}"></td>
             <td th:text="${systemUser.role}"></td>
             <td><a th:href="${'/admin/editUser/'+systemUser.id}">Edit</a></td>
-            <td><a onclick="alert('Are you sure that you want to delete the project ?')" th:href="${'/admin/deleteUser/'+systemUser.id}">Delete</a></td>
+            <td><a onclick="alert('Are you sure that you want to delete the user ?')" th:href="${'/admin/deleteUser/'+systemUser.id}">Delete</a></td>
         </tr>
         </tbody>
     </table>

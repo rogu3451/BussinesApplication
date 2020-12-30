@@ -147,7 +147,13 @@ public class AdminController {
             model.addAttribute("errorMessage","There were errors.");
             return "/admin/editUser";
         }
+    }
 
+    @GetMapping("/deleteUser/{id}")
+    public String deleteUser(@PathVariable("id") Long id){
+        System.out.println("User id:" +id);
+            systemUserService.deleteSystemUser(id);
+            return "redirect:/admin/allUsers";
     }
 
 }
