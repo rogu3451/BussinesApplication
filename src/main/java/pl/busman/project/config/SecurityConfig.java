@@ -1,11 +1,13 @@
 package pl.busman.project.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 import javax.sql.DataSource;
 
@@ -25,9 +27,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                // .antMatchers("/knight").hasAnyRole("ADMIN"). // gdy korzystamy z pamieci
               //  .antMatchers("/knights").hasAnyAuthority("USER","ADMIN") // gdy korzystamy z bazy danych
                 .antMatchers("/admin/**").hasAnyAuthority("ADMIN") // gdy korzystamy z bazy danych
+                .antMatchers("/employee/**").hasAnyAuthority("EMPLOYEE") // gdy korzystamy z bazy danych
+                .antMatchers("/customer/**").hasAnyAuthority("CUSTOMER") // gdy korzystamy z bazy danych
                 .anyRequest().authenticated()
                 .and()
-                .formLogin().defaultSuccessUrl("/admin/allProjects",true);
+                .formLogin()
+                    .successHandler(myAuthenticationSuccessHandler());
+               // .formLogin().defaultSuccessUrl("/admin/allProjects",true);
+    }
+
+    @Bean
+    public AuthenticationSuccessHandler myAuthenticationSuccessHandler(){
+        return new MySimpleUrlAuthenticationSuccessHandler();
     }
 
     @Autowired
