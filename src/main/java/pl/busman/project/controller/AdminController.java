@@ -15,6 +15,7 @@ import pl.busman.project.service.ProjectService;
 import pl.busman.project.service.RoleService;
 import pl.busman.project.service.SystemUserService;
 import pl.busman.project.service.TaskService;
+import pl.busman.project.service.validation.TaskValidation;
 import pl.busman.project.service.validation.UserValidation;
 
 import javax.validation.Valid;
@@ -38,6 +39,9 @@ public class AdminController {
 
     @Autowired
     UserValidation userValidation;
+
+    @Autowired
+    TaskValidation taskValidation;
 
     @GetMapping("/addProject")
     public String addProject(Model model){
@@ -169,17 +173,30 @@ public class AdminController {
         return "admin/addTask";
     }
 
-    @PostMapping("/editProject/addTask")
+    @PostMapping("/editProject/addTask/{id}")
     public String addTask(Task taskToSave, Model model){
         System.out.println("taskToSave: "+taskToSave);
-        taskService.addTask(taskToSave);
 
+        if(taskValidation.taskValidation(taskToSave,model)){
+            taskService.addTask(taskToSave);
+            model.addAttribute("successMessage","Task for project id: "+taskToSave.getProject_id()+" has been added.");
+            Task task = new Task();
+            task.setProject_id(taskToSave.getProject_id());
+            model.addAttribute("task",task);
+            return "admin/addTask";
+        }else{
+            model.addAttribute("task",taskToSave);
+            model.addAttribute("errorMessage","There were errors.");
+            return "admin/addTask";
+        }
+    }
 
-        Task task = new Task();
-        task.setProject_id(taskToSave.getProject_id());
-        model.addAttribute("task",task);
-        model.addAttribute("successMessage","Task for project id: "+taskToSave.getProject_id()+" has been added.");
-        return "admin/";
+    @GetMapping("/project/{id}/tasks")
+    public String projectsTasks(@PathVariable("id") Long id, Model model){
+        List<Task> tasks = taskService.getAllTasksById(id);
+        model.addAttribute("tasks",tasks);
+        model.addAttribute("projectId",id);
+        return "admin/allTasks";
     }
 
 }

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="admin/adminNavbar :: html_head">
+</head>
+<body>
+<div th:replace="admin/adminNavbar :: navbar"></div>
+<div class="container" style="min-height: 82.5vh;">
+    <h3>All tasks for project id: <span th:text="${projectId}"/> </h3>
+    <table class="table">
+        <thead>
+        <tr>
+            <td>Id</td>
+            <td>Title</td>
+            <td>Description</td>
+            <td>Status</td>
+            <td>Employee id</td>
+            <td>Needed time</td>
+            <td>Cost(PLN)</td>
+            <td>Date of creation</td>
+            <td>Date of end</td>
+        </tr>
+        </thead>
+        <tbody th:each = "task : ${tasks}">
+        <tr>
+            <td th:text="${task.id}"></td>
+            <td th:text="${task.title}"></td>
+            <td th:text="${task.description}"></td>
+            <td th:text="${task.status}"></td>
+            <td th:text="${task.employee_id}"></td>
+            <td th:text="${task.neededTime}"></td>
+            <td th:text="${task.cost}"></td>
+            <td th:text="${#temporals.format(task.dateOfCreation, 'dd-MM-yyyy')}"></td>
+            <td th:text="${#temporals.format(task.dateOfEnd, 'dd-MM-yyyy')}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div th:replace="footer :: footer"></div>
+</body>
+</html>

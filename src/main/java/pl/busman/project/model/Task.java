@@ -36,6 +36,25 @@ public class Task {
     @NotNull
     private LocalDateTime dateOfCreation = LocalDateTime.now();
 
+    private Double cost;
+
     private LocalDateTime dateOfEnd;
+
+    public Task(){}
+
+    public Task(Long id, Long project_id,  Long employee_id,  String title, String description,  String status, Integer neededTime,  LocalDateTime dateOfCreation, Double cost, LocalDateTime dateOfEnd) {
+        this.id = id;
+        this.project_id = project_id;
+        this.employee_id = employee_id;
+        this.title = title;
+        this.description = description;
+        this.status = status;
+        this.neededTime = neededTime;
+        this.dateOfCreation = dateOfCreation;
+        this.cost = cost;
+        this.dateOfEnd = dateOfEnd;
+    }
+
+
 
 }
