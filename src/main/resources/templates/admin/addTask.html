@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="admin/adminNavbar :: html_head">
+</head>
+<body>
+<div th:replace="admin/adminNavbar :: navbar"></div>
+<div class="container" style="min-height: 82.5vh;">
+
+    <h3>Add task to project id:  <span th:text="${task.project_id}" /> </h3>
+
+    <form class="form-horizontal" th:object="${task}" th:action="@{/admin/editProject/addTask}" th:method="post">
+        <div class="form-group">
+            <label class="control-label">Task title:</label>
+            <input type="text" class="form-control" th:field="*{title}"/>
+            <input type="hidden" class="form-control" th:field="*{project_id}"/>
+        </div>
+        <div class="form-group">
+            <label class="control-label">Description:</label>
+            <input type="text" class="form-control" th:field="*{description}"/>
+
+        </div>
+        <div class="form-group">
+            <label class="control-label">Employee id:</label>
+            <input type="number" class="form-control" th:field="*{employee_id}"/>
+        </div>
+
+        <div class="row">
+            <button type="submit" class="btn btn-default">Add</button>
+        </div>
+
+    </form>
+    <p class="alert alert-success" th:if="${successMessage}" th:text="${successMessage}"/>
+
+    <button class="btn btn-default"> <a th:href="${'/admin/editProject/'+task.project_id}">Back</a></button>
+
+</div>
+<div th:replace="footer :: footer"></div>
+</body>
+</html>

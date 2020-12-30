@@ -8,11 +8,13 @@ import org.springframework.web.bind.annotation.*;
 import pl.busman.project.model.Project;
 import pl.busman.project.model.Role;
 import pl.busman.project.model.SystemUser;
+import pl.busman.project.model.Task;
 import pl.busman.project.model.dto.UserWithRole;
 import pl.busman.project.model.dto.UsersWithRoleQuery;
 import pl.busman.project.service.ProjectService;
 import pl.busman.project.service.RoleService;
 import pl.busman.project.service.SystemUserService;
+import pl.busman.project.service.TaskService;
 import pl.busman.project.service.validation.UserValidation;
 
 import javax.validation.Valid;
@@ -30,6 +32,9 @@ public class AdminController {
 
     @Autowired
     RoleService roleService;
+
+    @Autowired
+    TaskService taskService;
 
     @Autowired
     UserValidation userValidation;
@@ -73,11 +78,11 @@ public class AdminController {
         }
     }
 
-    @GetMapping("/addProject/{id}")
+    @GetMapping("/editProject/{id}")
     public String editProject(@PathVariable("id") Long id, Model model) {
         Project project = projectService.getProject(id);
         model.addAttribute("project", project);
-        return "admin/addProject";
+        return "admin/editProject";
     }
 
     @GetMapping("/deleteProject/{id}")
@@ -154,6 +159,27 @@ public class AdminController {
         System.out.println("User id:" +id);
             systemUserService.deleteSystemUser(id);
             return "redirect:/admin/allUsers";
+    }
+
+    @GetMapping("/editProject/addTask/{id}")
+    public String addTask(@PathVariable("id") Long id, Model model){
+        Task task = new Task();
+        task.setProject_id(id);
+        model.addAttribute("task",task);
+        return "admin/addTask";
+    }
+
+    @PostMapping("/editProject/addTask")
+    public String addTask(Task taskToSave, Model model){
+        System.out.println("taskToSave: "+taskToSave);
+        taskService.addTask(taskToSave);
+
+
+        Task task = new Task();
+        task.setProject_id(taskToSave.getProject_id());
+        model.addAttribute("task",task);
+        model.addAttribute("successMessage","Task for project id: "+taskToSave.getProject_id()+" has been added.");
+        return "admin/";
     }
 
 }
