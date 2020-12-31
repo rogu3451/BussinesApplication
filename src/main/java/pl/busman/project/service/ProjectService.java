@@ -10,10 +10,13 @@ public interface ProjectService {
 
     List<Project> getAllProjects();
 
+    List<Project> getAllProjectsByUsername(String username);
+
     void addProject(Project project);
 
     Project getProject(Long id);
 
     void deleteProject(Long id);
+
 
 }

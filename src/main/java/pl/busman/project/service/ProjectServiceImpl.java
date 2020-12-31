@@ -6,7 +6,9 @@ import org.springframework.stereotype.Service;
 import pl.busman.project.exception.ProjectException.ProjectError;
 import pl.busman.project.exception.ProjectException.ProjectException;
 import pl.busman.project.model.Project;
+import pl.busman.project.model.SystemUser;
 import pl.busman.project.repository.ProjectRespository;
+import pl.busman.project.repository.SystemUserRepository;
 
 import java.util.List;
 
@@ -18,8 +20,17 @@ public class ProjectServiceImpl implements ProjectService {
     @Autowired
     ProjectRespository projectRespository;
 
+    @Autowired
+    SystemUserRepository systemUserRepository;
+
     public List<Project> getAllProjects() {
         return projectRespository.findAll(Sort.by(Sort.Direction.ASC, "id"));
+    }
+
+    @Override
+    public List<Project> getAllProjectsByUsername(String username) {
+        Long usernameId = systemUserRepository.getIdByUsername(username);
+        return (List<Project>) projectRespository.getAllProjectsByUserId(usernameId);
     }
 
     public void addProject(Project project) {

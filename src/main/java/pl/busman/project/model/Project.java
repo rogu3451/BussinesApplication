@@ -24,6 +24,14 @@ public class Project {
     @Size(min=2, max=500, message = "Description of project should be between 2 and 500 characters")
     private String description;
 
+    public Project(Long id, String name, String description) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+    }
+
+    public Project(){}
+
     public Long getId() {
         return id;
     }

@@ -27,6 +27,10 @@ public interface SystemUserRepository extends JpaRepository<SystemUser,Long> {
             "INNER JOIN Role role " +
             "ON user.username = role.username " +
             "WHERE user.id = :idFromClient ")
-            UsersWithRoleQuery getAllUserWithRoleById(@Param("idFromClient") Long id);
+    UsersWithRoleQuery getAllUserWithRoleById(@Param("idFromClient") Long id);
+
+    @Query("SELECT user.id FROM SystemUser user " +
+            "WHERE user.username = :username ")
+    Long getIdByUsername(@Param("username") String username);
 
 }
