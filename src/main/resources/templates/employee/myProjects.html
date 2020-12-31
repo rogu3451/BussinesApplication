@@ -19,14 +19,12 @@
             </tr>
             </thead>
             <tbody th:each = "project : ${project}">
-            <tr>
-                <td th:text="${project.id}"></td>
-                <td th:text="${project.name}"></td>
-                <td th:text="${project.description}"></td>
-                <td><a th:href="${'/admin/project/'+project.id+'/tasks'}">Tasks</a></td>
-                <td><a th:href="${'/admin/editProject/'+project.id}">Edit</a></td>
-                <td><a onclick="alert('Are you sure that you want to delete the project ?')" th:href="${'/admin/deleteProject/'+project.id}">Delete</a></td>
-            </tr>
+                <tr>
+                    <td th:text="${project.id}"></td>
+                    <td th:text="${project.name}"></td>
+                    <td th:text="${project.description}"></td>
+                    <td><a th:href="${'/employee/project/'+project.id+'/tasks'}">My Tasks</a></td>
+                </tr>
             </tbody>
         </table>
     </div>

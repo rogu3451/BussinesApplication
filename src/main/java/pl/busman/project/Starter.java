@@ -26,7 +26,7 @@ public class Starter implements CommandLineRunner {
     @Transactional
     public void run(String... args) throws Exception {  // przyjmuje dowolna ilosc stringow
 
-        SystemUser admin = new SystemUser("admin","Root12");
+       /* SystemUser admin = new SystemUser("admin","Root12");
         systemUserRepository.save(admin);
 
         Role adminRole = new Role("admin","ADMIN");
@@ -42,7 +42,7 @@ public class Starter implements CommandLineRunner {
         systemUserRepository.save(customer);
 
         Role customerRole = new Role("customer","CUSTOMER");
-        roleRepository.save(customerRole);
+        roleRepository.save(customerRole);*/
 
     }
 }

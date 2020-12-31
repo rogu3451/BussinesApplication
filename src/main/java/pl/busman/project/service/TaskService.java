@@ -9,4 +9,6 @@ public interface TaskService {
 
     List<Task> getAllTasksById(Long id);
 
+    List<Task> getAllTasksByUsernameAndProjectId(String username, Long projectId);
+
 }

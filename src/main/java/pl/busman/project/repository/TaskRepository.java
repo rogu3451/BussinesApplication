@@ -18,5 +18,10 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
             "WHERE task.project_id = :id")
     Collection<Task> findAllByProject_id(@Param("id") Long id);
 
+    @Query("SELECT new pl.busman.project.model.Task(task.id, task.project_id, task.employee_id, task.title, task.description, task.status, task.neededTime," +
+            "task.dateOfCreation, task.cost, task.dateOfEnd) FROM Task task " +
+            "WHERE task.employee_id = :employeeId AND task.project_id = :projectId")
+    Collection<Task> findAllByEmployeeIdAndProjectId(@Param("employeeId") Long employeeId, @Param("projectId") Long projectId);
+
 
 }
