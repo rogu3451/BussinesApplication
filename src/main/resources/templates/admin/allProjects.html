@@ -17,6 +17,9 @@
                 <td></td>
             </tr>
             </thead>
+            <tr th:if="${project.empty}">
+                <td colspan="2"> No Projects Available </td>
+            </tr>
             <tbody th:each = "project : ${project}">
             <tr>
                 <td th:text="${project.id}"></td>

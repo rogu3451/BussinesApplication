@@ -20,6 +20,9 @@
             <td>Date of end</td>
         </tr>
         </thead>
+        <tr th:if="${tasks.empty}">
+            <td colspan="2"> No Tasks Available </td>
+        </tr>
         <tbody th:each = "task : ${tasks}">
         <tr>
             <td th:text="${task.id}"></td>
