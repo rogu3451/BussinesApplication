@@ -1,5 +1,6 @@
 package pl.busman.project.model;
 
+import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -31,7 +32,7 @@ public class Task {
     @NotNull
     private String status = "NEW";
 
-    private Integer neededTime;
+    private Double neededTime;
 
     @NotNull
     private LocalDateTime dateOfCreation = LocalDateTime.now();
@@ -42,7 +43,7 @@ public class Task {
 
     public Task(){}
 
-    public Task(Long id, Long project_id,  Long employee_id,  String title, String description,  String status, Integer neededTime,  LocalDateTime dateOfCreation, Double cost, LocalDateTime dateOfEnd) {
+    public Task(Long id, Long project_id,  Long employee_id,  String title, String description,  String status, Double neededTime,  LocalDateTime dateOfCreation, Double cost, LocalDateTime dateOfEnd) {
         this.id = id;
         this.project_id = project_id;
         this.employee_id = employee_id;
@@ -54,7 +55,5 @@ public class Task {
         this.cost = cost;
         this.dateOfEnd = dateOfEnd;
     }
-
-
 
 }

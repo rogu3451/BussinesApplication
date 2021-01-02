@@ -7,9 +7,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import pl.busman.project.model.Project;
 import pl.busman.project.model.Task;
+import pl.busman.project.model.dto.TaskCreationDto;
 import pl.busman.project.service.ProjectService;
 import pl.busman.project.service.TaskService;
 
@@ -33,12 +35,20 @@ public class EmployeeController {
         return "employee/myProjects";
     }
 
-    @GetMapping("/project/{id}/tasks")
-    public String myTasksInSpecificProject(@PathVariable("id") Long projectId, Model model){
-
+    @GetMapping("/project/{projectId}/tasks")
+    public String myTasksInSpecificProject(@PathVariable("projectId") Long projectId, Model model){
         List<Task> tasks = taskService.getAllTasksByUsernameAndProjectId(getCurrentUserName(model),projectId);
-        model.addAttribute("tasks",tasks);
+        TaskCreationDto taskForm = new TaskCreationDto(tasks);
+        model.addAttribute("taskForm",taskForm);
         model.addAttribute("projectId",projectId);
+        return "employee/myTasks";
+    }
+
+    @PostMapping("/project/{projectId}/tasks")
+    public String saveTasks(@PathVariable("projectId") Long projectId, TaskCreationDto taskForm, Model model){
+        taskService.saveTasks(taskForm.getTasks());
+        model.addAttribute("projectId",projectId);
+        model.addAttribute("taskForm",taskForm);
         return "employee/myTasks";
     }
 
@@ -49,4 +59,5 @@ public class EmployeeController {
         model.addAttribute("name",currentPrincipalName);
         return  currentPrincipalName;
     }
+
 }
