@@ -14,6 +14,7 @@ import pl.busman.project.model.Task;
 import pl.busman.project.model.dto.TaskCreationDto;
 import pl.busman.project.service.ProjectService;
 import pl.busman.project.service.TaskService;
+import pl.busman.project.service.validation.TaskValidation;
 
 import java.util.List;
 
@@ -27,6 +28,9 @@ public class EmployeeController {
 
     @Autowired
     TaskService taskService;
+
+    @Autowired
+    TaskValidation taskValidation;
 
     @GetMapping("/myProjects")
     public String allProjects(Model model){
@@ -46,9 +50,19 @@ public class EmployeeController {
 
     @PostMapping("/project/{projectId}/tasks")
     public String saveTasks(@PathVariable("projectId") Long projectId, TaskCreationDto taskForm, Model model){
-        taskService.saveTasks(taskForm.getTasks());
-        model.addAttribute("projectId",projectId);
-        model.addAttribute("taskForm",taskForm);
+        if(taskValidation.validateTasks(taskForm.getTasks(), getCurrentUserName(model), projectId)){
+            taskService.updateTasks(taskForm.getTasks());
+            model.addAttribute("successMessage","Tasks modified");
+            model.addAttribute("projectId",projectId);
+            model.addAttribute("taskForm",taskForm);
+        }else{
+            getCurrentUserName(model);
+            model.addAttribute("nothingHasChanged","Nothing has changed");
+            model.addAttribute("errorMessage","There were errors");
+            model.addAttribute("projectId",projectId);
+            model.addAttribute("taskForm",taskForm);
+        }
+
         return "employee/myTasks";
     }
 

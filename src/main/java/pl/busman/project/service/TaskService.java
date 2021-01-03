@@ -7,12 +7,10 @@ public interface TaskService {
 
     void addTask(Task task);
 
-    void saveTasks(List<Task> tasks);
+    void updateTasks(List<Task> tasks);
 
     List<Task> getAllTasksById(Long id);
 
     List<Task> getAllTasksByUsernameAndProjectId(String username, Long projectId);
-
-
 
 }

@@ -22,7 +22,7 @@ public class TaskServiceImpl implements TaskService {
         taskRepository.save(task);
     }
 
-    public void saveTasks(List<Task> tasks) {
+    public void updateTasks(List<Task> tasks) {
         for(Task task : tasks){
             checkStatus(task);
             calculateCostForSingleTask(task);
