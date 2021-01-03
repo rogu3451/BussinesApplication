@@ -6,21 +6,33 @@
 <div th:replace="admin/adminNavbar :: navbar"></div>
 <div class="container" style="min-height: 82.5vh;">
 
-    <h3>Edit user with id = <span th:text="${userFromDb.id}"></span></h3>
+    <h3>Edit user with id = <span th:text="${userFromDb.userId}"></span></h3>
 
-    <form class="form-horizontal" th:object="${userFromDb}" th:action="@{'/admin/editUser/'+${userFromDb.id}}" th:method="post">
+    <form class="form-horizontal" th:object="${userFromDb}" th:action="@{'/admin/editUser/'+${userFromDb.userId}}" th:method="post">
+        <input type="hidden" class="form-control" th:field="*{userId}"/><!-- getSystemUser() = systemUser -->
+        <input type="hidden" class="form-control" th:field="*{roleId}"/><!-- getSystemUser() = systemUser -->
+
+        <div class="form-group">
+            <label class="control-label">First name:</label>
+            <input type="text" class="form-control" th:field="*{firstName}"/>
+            <p class="alert alert-danger" th:if="${firstNameIsNull}" th:text="${firstNameIsNull}"/>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label">Last name:</label>
+            <input type="text" class="form-control" th:field="*{lastName}"/>
+            <p class="alert alert-danger" th:if="${lastNameIsNull}" th:text="${lastNameIsNull}"/>
+        </div>
 
         <div class="form-group">
             <label class="control-label">Username:</label>
-            <input type="hidden" class="form-control" th:field="*{id}"/><!-- getSystemUser() = systemUser -->
-            <input type="hidden" class="form-control" th:field="*{role_id}"/><!-- getSystemUser() = systemUser -->
             <input type="text" class="form-control" th:field="*{username}"/>
              <p class="alert alert-danger" th:if="${incorrectLengthOfUsername}" th:text="${incorrectLengthOfUsername}"/>
             <p class="alert alert-danger" th:if="${usernameAllreadyExist}" th:text="${usernameAllreadyExist}"/>
         </div>
         <div class="form-group">
-            <label class="control-label">Set new password:</label>
-            <input type="text" class="form-control" th:field="*{password}"/>
+            <label class="control-label">Set new password (optional):</label>
+            <input type="password" class="form-control" th:field="*{password}"/>
             <p class="alert alert-danger" th:if="${invalidPassword}" th:text="${invalidPassword}"/>
         </div>
 
@@ -34,6 +46,7 @@
 
         <!--<p class="alert alert-danger" th:if="${#fields.hasErrors('role.role')}" th:errors="*{role.role}"/> -->
         <p class="alert alert-success" th:if="${successMessage}" th:text="${successMessage}"/>
+        <p class="alert alert-danger" th:if="${nothingHasChanged}" th:text="${nothingHasChanged}"/>
         <p class="alert alert-danger" th:if="${errorMessage}" th:text="${errorMessage}"/>
 
         <div class="row">

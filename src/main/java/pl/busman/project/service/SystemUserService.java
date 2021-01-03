@@ -20,9 +20,9 @@ public interface SystemUserService {
 
     boolean checkIfUsernameExist(String username);
 
-    UsersWithRoleQuery getAllUserWithRoleById(Long id);
+    UsersWithRoleQuery getAllUsersWithRoleById(Long id);
 
-    SystemUser createSystemUser(UsersWithRoleQuery usersWithRoleQuery);
+    void updateSystemUser(UsersWithRoleQuery usersWithRoleQuery);
 
 }
 

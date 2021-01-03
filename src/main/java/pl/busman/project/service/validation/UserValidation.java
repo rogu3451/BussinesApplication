@@ -4,8 +4,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import pl.busman.project.model.Role;
+import pl.busman.project.model.SystemUser;
 import pl.busman.project.model.dto.UserWithRole;
 import pl.busman.project.model.dto.UsersWithRoleQuery;
+import pl.busman.project.service.RoleService;
 import pl.busman.project.service.SystemUserService;
 
 @Component
@@ -13,6 +16,9 @@ public class UserValidation {
 
     @Autowired
     SystemUserService systemUserService;
+
+    @Autowired
+    RoleService roleService;
 
     public boolean validateUser(UserWithRole userWithRole, BindingResult bindingResult, Model model){
 
@@ -33,6 +39,16 @@ public class UserValidation {
             errors++;
         }
 
+        if(isNull(userWithRole.getSystemUser().getFirstName())){
+            model.addAttribute("firstNameIsNull","First name can not be null.");
+            errors++;
+        }
+
+        if(isNull(userWithRole.getSystemUser().getLastName())){
+            model.addAttribute("lastNameIsNull","Last name can not be null.");
+            errors++;
+        }
+
         if(errors!=0){
             return false; // something went wrong
         }else{
@@ -45,20 +61,84 @@ public class UserValidation {
 
         int errors = 0;
 
-        if(!usersWithRoleQuery.getPassword().isEmpty()){
-            try{
-                validatePassword(usersWithRoleQuery.getPassword());
-            }catch (Exception e){
-                errors++;
-                model.addAttribute("invalidPassword","Invalid password. " +
-                        "Password should have minimum 6 characters, one  uppercase letter and one digit.");
+        try{
+
+            // Data from db
+            SystemUser userFromDb = systemUserService.getSystemUser(usersWithRoleQuery.getUserId());
+            Role roleFromDb = roleService.getRole(usersWithRoleQuery.getRoleId());
+
+            // Data to modification
+            String firstName = usersWithRoleQuery.getFirstName();
+            String password = usersWithRoleQuery.getPassword();
+            String username = usersWithRoleQuery.getUsername();
+            String lastName = usersWithRoleQuery.getLastName();
+            String role = usersWithRoleQuery.getRole();
+            if(userFromDb.getFirstName().equals(firstName) &&
+                        userFromDb.getLastName().equals(lastName) &&
+                        userFromDb.getUsername().equals(username) &&
+                        roleFromDb.getRole().equals(role) &&
+                        password.isEmpty()
+
+            ){
+                        errors++;
+                        model.addAttribute("nothingHasChanged","Nothing has changed");
+            }else{
+                if(!password.isEmpty()){
+                    try{
+                        validatePassword(password);
+                    }catch (Exception e){
+                        errors++;
+                        model.addAttribute("invalidPassword","Invalid password. " +
+                                "Password should have minimum 6 characters, one  uppercase letter and one digit.");
+                    }
+                }
+
+                if(!checkLengthOfUsername(username)){
+                    model.addAttribute("incorrectLengthOfUsername","Username should be between 5 and 20 characters.");
+                    errors++;
+                }
+
+                if(isNull(firstName)){
+                    model.addAttribute("firstNameIsNull","First name can not be null.");
+                    errors++;
+                }
+
+                if(isNull(lastName)){
+                    model.addAttribute("lastNameIsNull","Last name can not be null.");
+                    errors++;
+                }
+
+                if(!password.isEmpty()){
+                    try{
+                        validatePassword(password);
+                        SystemUser.encodePassword(password);
+                    }catch (Exception e){
+                        errors++;
+                        model.addAttribute("invalidPassword","Invalid password. " +
+                                "Password should have minimum 6 characters, one  uppercase letter and one digit.");
+                    }
+                }
+
+                if(!checkLengthOfUsername(username)){
+                    model.addAttribute("incorrectLengthOfUsername","Username should be between 5 and 20 characters.");
+                    errors++;
+                }
+
+                if(isNull(firstName)){
+                    model.addAttribute("firstNameIsNull","First name can not be null.");
+                    errors++;
+                }
+
+                if(isNull(lastName)){
+                    model.addAttribute("lastNameIsNull","Last name can not be null.");
+                    errors++;
+                }
             }
-        }
 
 
-        if(!checkLengthOfUsername(usersWithRoleQuery.getUsername())){
-            model.addAttribute("incorrectLengthOfUsername","Username should be between 5 and 20 characters.");
-            errors++;
+
+        }catch (Exception e){
+            System.out.println("Encoding password error occur");
         }
 
         if(errors!=0){
@@ -66,7 +146,6 @@ public class UserValidation {
         }else{
             return true; // validation correct
         }
-
     }
 
     public static void validatePassword(String passwordToCheck) throws IllegalArgumentException{ // true - correct | false - incorrect
@@ -100,5 +179,13 @@ public class UserValidation {
             return systemUserService.checkIfUsernameExist(username);
         }
         return false;
+    }
+
+    private boolean isNull(String stringToCheck){
+        if(stringToCheck.isEmpty()){
+            return true;
+        }else{
+            return false;
+        }
     }
 }

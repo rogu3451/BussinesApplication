@@ -3,11 +3,8 @@ package pl.busman.project.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import pl.busman.project.exception.ProjectException.ProjectError;
-import pl.busman.project.exception.ProjectException.ProjectException;
 import pl.busman.project.exception.SystemUserException.SystemUserError;
 import pl.busman.project.exception.SystemUserException.SystemUserException;
-import pl.busman.project.model.Project;
 import pl.busman.project.model.Role;
 import pl.busman.project.model.dto.UsersWithRoleQuery;
 import pl.busman.project.repository.RoleRepository;
@@ -55,7 +52,7 @@ public class RoleServiceImpl implements RoleService {
     }
 
     public Role createRole(UsersWithRoleQuery usersWithRoleQuery) {
-        return new Role(usersWithRoleQuery.getRole_id(),usersWithRoleQuery.getUsername(),usersWithRoleQuery.getRole());
+        return new Role(usersWithRoleQuery.getRoleId(),usersWithRoleQuery.getUsername(),usersWithRoleQuery.getRole());
     }
 
 

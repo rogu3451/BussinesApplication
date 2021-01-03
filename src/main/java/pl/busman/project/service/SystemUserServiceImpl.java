@@ -14,6 +14,7 @@ import pl.busman.project.model.dto.UsersWithRoleQuery;
 import pl.busman.project.repository.RoleRepository;
 import pl.busman.project.repository.SystemUserRepository;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
@@ -33,7 +34,6 @@ public class SystemUserServiceImpl implements SystemUserService {
     }
 
     public void addSystemUser(SystemUser systemUser) {
-        System.out.println("ID: " + systemUser.getId());
         if (systemUser.getId() != null) {
             updateSystemUser(systemUser);
         } else {
@@ -75,23 +75,32 @@ public class SystemUserServiceImpl implements SystemUserService {
         return systemUserRepository.existsByUsername(username);
     }
 
-    public UsersWithRoleQuery getAllUserWithRoleById(Long id) {
-        return systemUserRepository.getAllUserWithRoleById(id);
+    public UsersWithRoleQuery getAllUsersWithRoleById(Long id) {
+        return systemUserRepository.getAllUsersWithRoleById(id);
     }
 
-    public SystemUser createSystemUser(UsersWithRoleQuery usersWithRoleQuery) {
+    @Transactional
+    public void updateSystemUser(UsersWithRoleQuery usersWithRoleQuery) {
         try{
-            if(usersWithRoleQuery.getPassword().isEmpty()){
-                SystemUser systemUser = new SystemUser(usersWithRoleQuery.getId(), usersWithRoleQuery.getUsername());
-                return systemUser;
-            }else{
-                SystemUser systemUser = new SystemUser(usersWithRoleQuery.getId(), usersWithRoleQuery.getUsername(),usersWithRoleQuery.getPassword());
-                return systemUser;
+            Long userId = usersWithRoleQuery.getUserId();
+            String username = usersWithRoleQuery.getUsername();
+            String firstName = usersWithRoleQuery.getFirstName();
+            String lastName = usersWithRoleQuery.getLastName();
+            String role = usersWithRoleQuery.getRole();
+            Long roleId = usersWithRoleQuery.getRoleId();
+
+            if(usersWithRoleQuery.getPassword().isEmpty()){  // Update without password because password is empty
+                systemUserRepository.updateSystemUserWithoutPassword(userId, username,firstName,lastName);
+            }else{// Update with password because password is provided
+                String password = usersWithRoleQuery.getPassword();
+                String encodedPassword = SystemUser.encodePassword(password);
+                systemUserRepository.updateSystemUserWithPassword(userId,username,encodedPassword,firstName,lastName);
             }
+                roleRepository.updateRoleById(username,role,roleId);  // update role
+
         }catch (Exception e){
-            System.out.println("User creation error!");
+            System.out.println("Something went wrong with updating user!");
         }
-        return null;
     }
 
 }

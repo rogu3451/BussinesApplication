@@ -130,8 +130,7 @@ public class AdminController {
 
     @GetMapping("/editUser/{id}")
     public String editUser(@PathVariable("id") Long id, Model model){
-
-        UsersWithRoleQuery usersWithRoleQuery = systemUserService.getAllUserWithRoleById(id);
+        UsersWithRoleQuery usersWithRoleQuery = systemUserService.getAllUsersWithRoleById(id);
         model.addAttribute("userFromDb", usersWithRoleQuery);
         return "/admin/editUser";
 
@@ -141,13 +140,7 @@ public class AdminController {
     public String editUser(UsersWithRoleQuery usersWithRoleQuery, BindingResult bindingResult, Model model){
 
         if(userValidation.validateUser(usersWithRoleQuery, bindingResult, model)){
-            SystemUser systemUserToEdit = systemUserService.createSystemUser(usersWithRoleQuery);
-            systemUserService.addSystemUser(systemUserToEdit);
-
-            Role roleToEdit = roleService.createRole(usersWithRoleQuery);
-            roleService.addRole(roleToEdit);
-            roleService.addRole(roleToEdit);
-
+            systemUserService.updateSystemUser(usersWithRoleQuery);
             model.addAttribute("userFromDb", usersWithRoleQuery);
             model.addAttribute("successMessage","The user has been modified.");
             return "/admin/editUser";
@@ -160,7 +153,6 @@ public class AdminController {
 
     @GetMapping("/deleteUser/{id}")
     public String deleteUser(@PathVariable("id") Long id){
-        System.out.println("User id:" +id);
             systemUserService.deleteSystemUser(id);
             return "redirect:/admin/allUsers";
     }

@@ -2,6 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="admin/adminNavbar :: html_head">
 </head>
+<link th:href="@{/css/myTasks.css}" rel="stylesheet" />
 <body>
     <div th:replace="admin/adminNavbar :: navbar"></div>
     <div class="container" style="min-height: 82.5vh;">
@@ -12,6 +13,8 @@
                 <td>Id</td>
                 <td>Name</td>
                 <td>Description</td>
+                <td>Customer</td>
+                <td></td>
                 <td></td>
                 <td></td>
                 <td></td>
@@ -24,8 +27,23 @@
             <tr>
                 <td th:text="${project.id}"></td>
                 <td th:text="${project.name}"></td>
-                <td th:text="${project.description}"></td>
+                <td>
+                    <button type="button" th:onclick="|showDescription('${project.id}')|">Details</button>
+                    <div th:id="'popup'+${project.id}" class="popup-wrapper hide">
+                        <div class="popup-content">
+                            <div class="popup-title">
+                                <button type="button" class="popup-close" th:onclick="|closeDescription('${project.id}')|">&times;</button>
+                                <h3>Description of project: "<span th:text="${project.name}"></span>"</h3>
+                            </div>
+                            <div class="popup-body">
+                                <p th:text="${project.description}"></p>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+                <td> Jan Kowalski </td>
                 <td><a th:href="${'/admin/project/'+project.id+'/tasks'}">Tasks</a></td>
+                <td><a th:href="${'/admin/editProject/addTask/'+project.id}">Add task</a></td>
                 <td><a th:href="${'/admin/editProject/'+project.id}">Edit</a></td>
                 <td><a onclick="alert('Are you sure that you want to delete the project ?')" th:href="${'/admin/deleteProject/'+project.id}">Delete</a></td>
             </tr>
@@ -34,4 +52,5 @@
     </div>
     <div th:replace="footer :: footer"></div>
 </body>
+<script type="text/javascript" th:src="@{/js/description.js}"></script>
 </html>

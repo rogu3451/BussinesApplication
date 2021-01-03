@@ -26,19 +26,28 @@ public class SystemUser {
     private String password;
 
     @NotNull
+    private String firstName;
+
+    @NotNull
+    private String lastName;
+
+    @NotNull
     private boolean enabled;
 
     @Transient
-    BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    private static BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     public SystemUser() {
     }
 
-    public SystemUser(Long id, String username) {
+    public SystemUser(Long id, String username, String firstName, String lastName) {
         this.id = id;
         this.username=username;
+        this.firstName=firstName;
+        this.lastName=lastName;
         this.enabled=true;
     }
+
 
     public SystemUser(Long id, String username, String password) throws Exception{
         if(password!=null){
@@ -51,17 +60,19 @@ public class SystemUser {
         this.enabled=true;
     }
 
-    public SystemUser(String username, String password) throws Exception{
+    public SystemUser(String username, String password, String firstName, String lastName) throws Exception{
         if(password!=null){
             UserValidation.validatePassword(password);
             String encodedPassword = encodePassword(password);
             this.password=encodedPassword;
         }
+        this.firstName=firstName;
+        this.lastName=lastName;
         this.username=username;
         this.enabled=true;
     }
 
-    public String encodePassword(String passwordToEncode) throws Exception{
+    public static String encodePassword(String passwordToEncode) throws Exception{
         return passwordEncoder.encode(passwordToEncode);
     }
 
@@ -91,5 +102,22 @@ public class SystemUser {
         this.password = encodedPassword;
         this.enabled=true;
     }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
 
 }

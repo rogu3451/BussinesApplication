@@ -26,13 +26,13 @@ public class Starter implements CommandLineRunner {
     @Transactional
     public void run(String... args) throws Exception {  // przyjmuje dowolna ilosc stringow
 
-       /* SystemUser admin = new SystemUser("admin","Root12");
+        SystemUser admin = new SystemUser("admin","Root12","Karol","Rogoziński");
         systemUserRepository.save(admin);
 
         Role adminRole = new Role("admin","ADMIN");
         roleRepository.save(adminRole);
 
-        SystemUser employee = new SystemUser("employee","Root12");
+        /* SystemUser employee = new SystemUser("employee","Root12");
         systemUserRepository.save(employee);
 
         Role employeeRole = new Role("employee","EMPLOYEE");

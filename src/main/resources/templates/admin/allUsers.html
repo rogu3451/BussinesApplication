@@ -10,7 +10,8 @@
         <thead>
         <tr>
             <td>Id</td>
-            <td>Username</td>
+            <td>First name</td>
+            <td>Last name</td>
             <td>Role</td>
             <td></td>
             <td></td>
@@ -18,11 +19,12 @@
         </thead>
         <tbody th:each = "systemUser : ${systemUsers}">
         <tr>
-            <td th:text="${systemUser.id}"></td>
-            <td th:text="${systemUser.username}"></td>
+            <td th:text="${systemUser.userId}"></td>
+            <td th:text="${systemUser.firstName}"></td>
+            <td th:text="${systemUser.lastName}"></td>
             <td th:text="${systemUser.role}"></td>
-            <td><a th:href="${'/admin/editUser/'+systemUser.id}">Edit</a></td>
-            <td><a onclick="alert('Are you sure that you want to delete the user ?')" th:href="${'/admin/deleteUser/'+systemUser.id}">Delete</a></td>
+            <td><a th:href="${'/admin/editUser/'+systemUser.userId}">Edit</a></td>
+            <td><a onclick="alert('Are you sure that you want to delete the user ?')" th:href="${'/admin/deleteUser/'+systemUser.userId}">Delete</a></td>
         </tr>
         </tbody>
     </table>
