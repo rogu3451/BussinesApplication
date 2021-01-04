@@ -24,5 +24,7 @@ public interface SystemUserService {
 
     void updateSystemUser(UsersWithRoleQuery usersWithRoleQuery);
 
+    List<SystemUser> getAllCustomers();
+
 }
 

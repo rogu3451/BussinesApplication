@@ -18,6 +18,9 @@ public interface SystemUserRepository extends JpaRepository<SystemUser,Long> {
 
     boolean existsByUsername(String username); // true if username exists in database
 
+    @Query("SELECT new pl.busman.project.model.SystemUser(user.id, user.username, user.firstName, user.lastName) FROM SystemUser user INNER JOIN" +
+            " Role role ON user.username = role.username WHERE role.role = 'CUSTOMER' ORDER BY user.id")
+    Collection<SystemUser> getAllCustomers();
 
     @Query("SELECT new pl.busman.project.model.dto.UsersWithRoleQuery(user.id, user.username, user.firstName, user.lastName, role.role, role.id) FROM SystemUser user " +
                    "INNER JOIN Role role " +

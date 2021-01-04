@@ -32,17 +32,17 @@ public class Starter implements CommandLineRunner {
         Role adminRole = new Role("admin","ADMIN");
         roleRepository.save(adminRole);
 
-        /* SystemUser employee = new SystemUser("employee","Root12");
+        SystemUser employee = new SystemUser("employee","Root12", "Emil","Bułka");
         systemUserRepository.save(employee);
 
         Role employeeRole = new Role("employee","EMPLOYEE");
         roleRepository.save(employeeRole);
 
-        SystemUser customer = new SystemUser("customer","Root12");
+        SystemUser customer = new SystemUser("customer","Root12", "Martyna","Karwacka");
         systemUserRepository.save(customer);
 
         Role customerRole = new Role("customer","CUSTOMER");
-        roleRepository.save(customerRole);*/
+        roleRepository.save(customerRole);
 
     }
 }
