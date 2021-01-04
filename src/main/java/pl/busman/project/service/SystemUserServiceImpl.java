@@ -103,9 +103,12 @@ public class SystemUserServiceImpl implements SystemUserService {
         }
     }
 
-    @Override
     public List<SystemUser> getAllCustomers() {
         return (List<SystemUser>)systemUserRepository.getAllCustomers();
+    }
+
+    public String getUsernameById(Long id){
+       return systemUserRepository.getUsernameById(id);
     }
 
 }

@@ -20,7 +20,7 @@ public class UserValidation {
     @Autowired
     RoleService roleService;
 
-    public boolean validateUser(UserWithRole userWithRole, BindingResult bindingResult, Model model){
+    public boolean validateUser(UserWithRole userWithRole, BindingResult bindingResult, Model model){ // used while adding
 
         int errors = 0;
 
@@ -57,7 +57,7 @@ public class UserValidation {
 
     }
 
-    public boolean validateUser(UsersWithRoleQuery usersWithRoleQuery, BindingResult bindingResult, Model model) { // used while modified
+    public boolean validateUser(UsersWithRoleQuery usersWithRoleQuery, BindingResult bindingResult, Model model) { // used while modification
 
         int errors = 0;
 
@@ -68,6 +68,7 @@ public class UserValidation {
             Role roleFromDb = roleService.getRole(usersWithRoleQuery.getRoleId());
 
             // Data to modification
+            Long userId = usersWithRoleQuery.getUserId();
             String firstName = usersWithRoleQuery.getFirstName();
             String password = usersWithRoleQuery.getPassword();
             String username = usersWithRoleQuery.getUsername();
@@ -96,6 +97,13 @@ public class UserValidation {
                 if(!checkLengthOfUsername(username)){
                     model.addAttribute("incorrectLengthOfUsername","Username should be between 5 and 20 characters.");
                     errors++;
+                }
+
+                if(checkIfUsernameExist(username)){
+                    if(!username.equals(getUsernameById(userId))){
+                        model.addAttribute("usernameAllreadyExist","Username allready exist.");
+                        errors++;
+                    }
                 }
 
                 if(isNull(firstName)){
@@ -179,6 +187,10 @@ public class UserValidation {
             return systemUserService.checkIfUsernameExist(username);
         }
         return false;
+    }
+
+    private String getUsernameById(Long id){
+        return systemUserService.getUsernameById(id);
     }
 
     private boolean isNull(String stringToCheck){

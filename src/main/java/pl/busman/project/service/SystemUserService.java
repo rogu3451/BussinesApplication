@@ -26,5 +26,7 @@ public interface SystemUserService {
 
     List<SystemUser> getAllCustomers();
 
+    String getUsernameById(Long id);
+
 }
 

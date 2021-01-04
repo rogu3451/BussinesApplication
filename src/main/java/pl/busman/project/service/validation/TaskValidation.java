@@ -43,6 +43,7 @@ public class TaskValidation {
     public boolean validateTasks(List<Task> tasksAfterModification, String currentUsername, Long projectId){
         List<Task> tasksBeforeModification = taskService.getAllTasksByUsernameAndProjectId(currentUsername,projectId);
         int numberOfTasks = tasksBeforeModification.size();
+        System.out.println("Number of tasks: "+numberOfTasks);
         System.out.println("Tasks before modification: ");
         System.out.println(tasksBeforeModification);
 
@@ -52,13 +53,19 @@ public class TaskValidation {
         int numberOfDifferences = 0;
 
         for(int i=0; i<numberOfTasks; i++){
+            System.out.println("Int i: "+i + "A");
             if(!tasksBeforeModification.get(i).getStatus().equals(tasksAfterModification.get(i).getStatus())){
                 numberOfDifferences++;
             }
+            System.out.println("Int i: "+i + "B");
             if(!tasksBeforeModification.get(i).getNeededTime().equals(tasksAfterModification.get(i).getNeededTime())){
-                numberOfDifferences++;
+                    numberOfDifferences++;
             }
+
+
         }
+
+        System.out.println("Number of diferences: "+numberOfDifferences);
 
         if(numberOfDifferences!=0){
             return true; // There were any differences so we can update the data

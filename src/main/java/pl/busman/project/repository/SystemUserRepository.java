@@ -50,5 +50,7 @@ public interface SystemUserRepository extends JpaRepository<SystemUser,Long> {
     @Query("UPDATE SystemUser user SET user.username = :username, user.firstName = :firstName, user.lastName = :lastName, user.password = :password  WHERE user.id = :userId")
     void updateSystemUserWithPassword(@Param("userId") Long userId, @Param("username") String username,  @Param("password") String password, @Param("firstName") String firstName, @Param("lastName") String lastName);
 
-
+    @Query("SELECT user.username FROM SystemUser user " +
+            " WHERE user.id = :userId")
+    String getUsernameById(@Param("userId") Long id);
 }

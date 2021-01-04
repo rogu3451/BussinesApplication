@@ -32,12 +32,12 @@ public class Task {
     @NotNull
     private String status = "NEW";
 
-    private Double neededTime;
+    private Double neededTime = 0.0;
 
     @NotNull
     private LocalDateTime dateOfCreation = LocalDateTime.now();
 
-    private Double cost;
+    private Double cost = 0.0;
 
     private LocalDateTime dateOfEnd;
 
