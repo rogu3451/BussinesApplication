@@ -62,4 +62,14 @@ public interface SystemUserRepository extends JpaRepository<SystemUser,Long> {
     @Query("SELECT new pl.busman.project.model.SystemUser(user.id, user.username, user.firstName, user.lastName) FROM SystemUser user " +
             "INNER JOIN Project project ON project.customerId = user.id WHERE project.id = :projectId")
     List<SystemUser> getCustomerDetailsByProjectId(@Param("projectId") Long projectId);
+
+    @Query("SELECT new pl.busman.project.model.SystemUser(user.id, user.username, user.firstName, user.lastName) FROM SystemUser user INNER JOIN" +
+            " Role role ON user.username = role.username WHERE role.role = 'EMPLOYEE' ORDER BY user.id")
+    List<SystemUser> getAllEmployees();
+
+
+    @Query("SELECT new pl.busman.project.model.SystemUser(user.id, user.username, user.firstName, user.lastName) FROM SystemUser user " +
+            "INNER JOIN Role role ON user.username = role.username WHERE user.id = :employeeId AND role.role = 'EMPLOYEE' ")
+    SystemUser getEmployeeById(@Param("employeeId") Long employeeId);
+
 }

@@ -7,6 +7,7 @@ import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
 @Entity
@@ -27,6 +28,8 @@ public class Task {
     @NotNull
     private String title;
 
+    @Column(length = 5000)
+    @Size(min=10, max=5000)
     private String description;
 
     @NotNull

@@ -5,10 +5,7 @@ package pl.busman.project.model;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -27,7 +24,8 @@ public class Project {
     private String name;
 
     @NotNull
-    @Size(min=10, message = "Description of project should have minimum 10 characters")
+    @Column(length = 5000)
+    @Size(min=10, max=5000, message = "Description of project should be between 10 and 5000 characters")
     private String description;
 
     @NotNull

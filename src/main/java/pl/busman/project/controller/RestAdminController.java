@@ -28,4 +28,9 @@ public class RestAdminController {
     public List<SystemUser> getCustomerDetailsByProjectId(@PathVariable("projectId") Long projectId){
         return systemUserService.getCustomerDetailsByProjectId(projectId);
     }
+
+    @GetMapping("/getAllEmployees")
+    public List<SystemUser> getAllEmployees(){
+        return systemUserService.getAllEmployees();
+    }
 }

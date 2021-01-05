@@ -120,6 +120,16 @@ public class SystemUserServiceImpl implements SystemUserService {
         return systemUserRepository.getCustomerDetailsByProjectId(projectId);
     }
 
+
+    public List<SystemUser> getAllEmployees() {
+        return systemUserRepository.getAllEmployees();
+    }
+
+    @Override
+    public SystemUser getEmployeeById(Long employeeId) {
+        return systemUserRepository.getEmployeeById(employeeId);
+    }
+
 }
 
 

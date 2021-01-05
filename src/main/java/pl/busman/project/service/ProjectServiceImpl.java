@@ -44,7 +44,7 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     public void addProject(Project project, BindingResult bindingResult, Model model) {
-        if(projectValidation.validateProject(bindingResult,project,model)){
+        if(projectValidation.validateProject(bindingResult,project,model,false)){
             projectRespository.save(project);
             Project emptyProject = new Project();
             model.addAttribute("project",emptyProject);
@@ -56,7 +56,7 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Transactional
     public void updateProject(Project project, BindingResult bindingResult, Model model) {
-        if(projectValidation.validateProject(bindingResult,project,model)){
+        if(projectValidation.validateProject(bindingResult,project,model,true)){
             projectRespository.updateProject(project.getId(),project.getName(), project.getDescription(), project.getCustomerId());
             model.addAttribute("successMessage","The project has been modified.");
         }else{

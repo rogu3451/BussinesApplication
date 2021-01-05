@@ -31,5 +31,9 @@ public interface SystemUserService {
     SystemUser getCustomerById(Long customerId);
 
     List<SystemUser> getCustomerDetailsByProjectId(Long projectId);
+
+    List<SystemUser> getAllEmployees();
+
+    SystemUser getEmployeeById(Long employeeId);
 }
 

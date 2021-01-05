@@ -18,8 +18,8 @@ public class ProjectValidation {
     @Autowired
     ProjectService projectService;
 
-    public boolean validateProject(BindingResult bindingResult, Project project, Model model) { // In this case validation was created with hibernate's annotations.
-        if (bindingResult.hasErrors() | !checkIfCustomerExists(project.getCustomerId(),model) | !checkIfChangesOccured(project,model)) {
+    public boolean validateProject(BindingResult bindingResult, Project project, Model model, boolean isUpdate) { // In this case validation was created with hibernate's annotations.
+        if (bindingResult.hasErrors() | !checkIfCustomerExists(project.getCustomerId(),model) | (isUpdate && !checkIfChangesOccured(project,model)) ) {
             bindingResult.getAllErrors().forEach(error -> {
                 System.out.println(error.getObjectName() + " " + error.getDefaultMessage());
             });
@@ -29,11 +29,12 @@ public class ProjectValidation {
         }
     }
 
-    private boolean checkIfChangesOccured(Project projectAfterModication, Model model) {
-        Project projectBeforeModification = projectService.getProject(projectAfterModication.getId());
-        String modifiedName = projectAfterModication.getName();
-        String modifiedDescription = projectAfterModication.getDescription();
-        Long modifiedCustomerId = projectAfterModication.getCustomerId();
+  
+    private boolean checkIfChangesOccured(Project projectAfterModification, Model model) {
+        Project projectBeforeModification = projectService.getProject(projectAfterModification.getId());
+        String modifiedName = projectAfterModification.getName();
+        String modifiedDescription = projectAfterModification.getDescription();
+        Long modifiedCustomerId = projectAfterModification.getCustomerId();
 
 
         if(projectBeforeModification.getName().equals(modifiedName) &&

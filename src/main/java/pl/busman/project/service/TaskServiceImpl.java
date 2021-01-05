@@ -5,9 +5,11 @@ import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 import pl.busman.project.model.Task;
 import pl.busman.project.repository.SystemUserRepository;
 import pl.busman.project.repository.TaskRepository;
+import pl.busman.project.service.validation.TaskValidation;
 
 @Service
 public class TaskServiceImpl implements TaskService {
@@ -16,10 +18,23 @@ public class TaskServiceImpl implements TaskService {
     TaskRepository taskRepository;
 
     @Autowired
+    TaskValidation taskValidation;
+
+    @Autowired
     SystemUserRepository systemUserRepository;
 
-    public void addTask(Task task) {
-        taskRepository.save(task);
+    public void addTask(Task taskToSave, Model model) {
+        if(taskValidation.taskValidation(taskToSave,model)){
+            taskRepository.save(taskToSave);
+            model.addAttribute("successMessage","Task for project id: "+taskToSave.getProject_id()+" has been added.");
+            Task task = new Task();
+            task.setProject_id(taskToSave.getProject_id());
+            model.addAttribute("task",task);
+        }else{
+            model.addAttribute("task",taskToSave);
+            model.addAttribute("errorMessage","There were errors.");
+        }
+
     }
 
     public void updateTasks(List<Task> tasks) {

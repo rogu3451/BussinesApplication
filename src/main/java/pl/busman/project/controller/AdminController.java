@@ -60,6 +60,7 @@ public class AdminController {
 
     @PostMapping("/addProject")
     public String addProject(@Valid Project project, BindingResult bindingResult, Model model){
+            System.out.println("Admin controller");
             projectService.addProject(project,bindingResult,model);
             return "admin/addProject";
     }
@@ -155,20 +156,8 @@ public class AdminController {
 
     @PostMapping("/editProject/addTask/{id}")
     public String addTask(Task taskToSave, Model model){
-        System.out.println("taskToSave: "+taskToSave);
-
-        if(taskValidation.taskValidation(taskToSave,model)){
-            taskService.addTask(taskToSave);
-            model.addAttribute("successMessage","Task for project id: "+taskToSave.getProject_id()+" has been added.");
-            Task task = new Task();
-            task.setProject_id(taskToSave.getProject_id());
-            model.addAttribute("task",task);
-            return "admin/addTask";
-        }else{
-            model.addAttribute("task",taskToSave);
-            model.addAttribute("errorMessage","There were errors.");
-            return "admin/addTask";
-        }
+        taskService.addTask(taskToSave, model);
+        return "admin/addTask";
     }
 
     @GetMapping("/project/{id}/tasks")

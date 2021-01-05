@@ -19,12 +19,16 @@
         <div class="form-group">
             <label class="control-label">Description:</label>
             <textarea type="text" class="form-control" rows="7" th:field="*{description}"/>
+            <p class="alert alert-danger" th:if="${tooLongDescription}" th:text="${tooLongDescription}"/>
         </div>
         <div class="form-group">
-            <label class="control-label">Employee id:</label>
-            <input type="number" class="form-control" th:field="*{employee_id}"/>
+            <label class="control-label">Select employee who will be responsible the task:</label>
+            <br>
+            <select id="employees" class="form-control" th:field="*{employee_id}"></select>
             <p class="alert alert-danger" th:if="${emptyEmployeeId}" th:text="${emptyEmployeeId}"/>
+            <p class="alert alert-danger" th:if="${employeeDoesNotExist}" th:text="${employeeDoesNotExist}"/>
         </div>
+
         <p class="alert alert-success" th:if="${successMessage}" th:text="${successMessage}"/>
         <p class="alert alert-danger" th:if="${errorMessage}" th:text="${errorMessage}"/>
         <div class="row">
@@ -38,4 +42,5 @@
 </div>
 <div th:replace="footer :: footer"></div>
 </body>
+<script type="text/javascript" th:src="@{/js/getAllEmployees.js}"></script>
 </html>
