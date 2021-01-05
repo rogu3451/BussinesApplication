@@ -9,6 +9,7 @@ import pl.busman.project.model.Project;
 import pl.busman.project.model.Role;
 import pl.busman.project.model.SystemUser;
 import pl.busman.project.model.Task;
+import pl.busman.project.model.dto.ProjectWithCustomerDetalis;
 import pl.busman.project.model.dto.UserWithRole;
 import pl.busman.project.model.dto.UsersWithRoleQuery;
 import pl.busman.project.service.ProjectService;
@@ -52,7 +53,7 @@ public class AdminController {
 
     @GetMapping("/allProjects")
     public String allProjects(Model model){
-        List<Project> allProjects = projectService.getAllProjects();
+        List<ProjectWithCustomerDetalis> allProjects = projectService.getAllProjectsWithCustomerDetails();
         model.addAttribute("project",allProjects);
         return "admin/allProjects";
     }
@@ -61,6 +62,12 @@ public class AdminController {
     public String addProject(@Valid Project project, BindingResult bindingResult, Model model){
             projectService.addProject(project,bindingResult,model);
             return "admin/addProject";
+    }
+
+    @PostMapping("/editProject/{id}")
+    public String editProject(@Valid Project project, BindingResult bindingResult, Model model) {
+        projectService.updateProject(project,bindingResult,model);
+        return "admin/editProject";
     }
 
     @GetMapping("/editProject/{id}")

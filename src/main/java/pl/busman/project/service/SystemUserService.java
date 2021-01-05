@@ -29,5 +29,7 @@ public interface SystemUserService {
     String getUsernameById(Long id);
 
     SystemUser getCustomerById(Long customerId);
+
+    List<SystemUser> getCustomerDetailsByProjectId(Long projectId);
 }
 

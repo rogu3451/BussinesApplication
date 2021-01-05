@@ -41,7 +41,7 @@
                         </div>
                     </div>
                 </td>
-                <td> Jan Kowalski </td>
+                <td> <span th:text="${project.firstName}"></span> <span th:text="${project.lastName}"></span> </td>
                 <td><a th:href="${'/admin/project/'+project.id+'/tasks'}">Tasks</a></td>
                 <td><a th:href="${'/admin/editProject/addTask/'+project.id}">Add task</a></td>
                 <td><a th:href="${'/admin/editProject/'+project.id}">Edit</a></td>

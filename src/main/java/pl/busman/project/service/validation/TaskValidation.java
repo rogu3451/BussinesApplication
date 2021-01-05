@@ -43,13 +43,6 @@ public class TaskValidation {
     public boolean validateTasks(List<Task> tasksAfterModification, String currentUsername, Long projectId){
         List<Task> tasksBeforeModification = taskService.getAllTasksByUsernameAndProjectId(currentUsername,projectId);
         int numberOfTasks = tasksBeforeModification.size();
-        System.out.println("Number of tasks: "+numberOfTasks);
-        System.out.println("Tasks before modification: ");
-        System.out.println(tasksBeforeModification);
-
-        System.out.println("Tasks after modification: ");
-        System.out.println(tasksAfterModification);
-
         int numberOfDifferences = 0;
 
         for(int i=0; i<numberOfTasks; i++){

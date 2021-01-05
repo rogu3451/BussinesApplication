@@ -12,6 +12,7 @@ import pl.busman.project.model.dto.UsersWithRoleQuery;
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.List;
 
 @Repository
 public interface SystemUserRepository extends JpaRepository<SystemUser,Long> {
@@ -57,4 +58,8 @@ public interface SystemUserRepository extends JpaRepository<SystemUser,Long> {
     @Query("SELECT new pl.busman.project.model.SystemUser(user.id, user.username, user.firstName, user.lastName) FROM SystemUser user " +
             "INNER JOIN Role role ON user.username = role.username WHERE user.id = :customerId AND role.role = 'CUSTOMER'")
     SystemUser getCustomerById(@Param("customerId") Long customerId);
+
+    @Query("SELECT new pl.busman.project.model.SystemUser(user.id, user.username, user.firstName, user.lastName) FROM SystemUser user " +
+            "INNER JOIN Project project ON project.customerId = user.id WHERE project.id = :projectId")
+    List<SystemUser> getCustomerDetailsByProjectId(@Param("projectId") Long projectId);
 }

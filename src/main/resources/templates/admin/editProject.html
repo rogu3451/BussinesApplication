@@ -8,7 +8,7 @@
 
     <h3>Edit project: <span th:text="${project.name}" /> </h3>
 
-    <form class="form-horizontal" th:object="${project}" th:action="@{/admin/addProject}" th:method="post">
+    <form class="form-horizontal" th:object="${project}" th:action="@{'/admin/editProject/'+${project.id}}" th:method="post">
         <div class="form-group">
             <label class="control-label">Name:</label>
             <input type="hidden" class="form-control" th:field="*{id}"/>
@@ -20,8 +20,19 @@
             <textarea type="text" class="form-control" rows="7"  th:field="*{description}"/>
             <p class="alert alert-danger" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"/>
         </div>
+        <div class="form-group">
+            <label class="control-label">Select customer who will be owner of the project:</label>
+            <br>
+            <select id="customers" th:field="*{customerId}">
+            </select>
+        </div>
 
-        <p class="alert alert-success" th:if="${message}" th:text="${message}"/>
+        <p class="alert alert-danger" th:if="${#fields.hasErrors('customerId')}" th:errors="*{customerId}"/>
+        <p class="alert alert-danger" th:if="${customerDoesNotExist}" th:text="${customerDoesNotExist}"/>
+
+        <p class="alert alert-success" th:if="${successMessage}" th:text="${successMessage}"/>
+        <p class="alert alert-danger" th:if="${nothingHasChanged}" th:text="${nothingHasChanged}"/>
+        <p class="alert alert-danger" th:if="${errorMessage}" th:text="${errorMessage}"/>
         <div class="row">
             <button type="submit" class="btn btn-default">Save</button>
         </div>
@@ -34,4 +45,5 @@
 </div>
 <div th:replace="footer :: footer"></div>
 </body>
+    <script type="text/javascript" th:src="@{/js/getAllCustomersEditView.js}"></script>
 </html>
