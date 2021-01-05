@@ -14,7 +14,7 @@ import java.util.Collection;
 public interface ProjectRespository extends JpaRepository<Project, Long> {
 
 
-    @Query("SELECT new pl.busman.project.model.Project(project.id, project.name, project.description) " +
+    @Query("SELECT new pl.busman.project.model.Project(project.id, project.name, project.description,project.customerId) " +
             "FROM Project project WHERE project.id IN (SELECT task.project_id FROM Task task WHERE task.employee_id = :id)")
     Collection<Project> getAllProjectsByUserId(@Param("id") Long id);
 }

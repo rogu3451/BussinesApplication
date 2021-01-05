@@ -53,4 +53,8 @@ public interface SystemUserRepository extends JpaRepository<SystemUser,Long> {
     @Query("SELECT user.username FROM SystemUser user " +
             " WHERE user.id = :userId")
     String getUsernameById(@Param("userId") Long id);
+
+    @Query("SELECT new pl.busman.project.model.SystemUser(user.id, user.username, user.firstName, user.lastName) FROM SystemUser user " +
+            "INNER JOIN Role role ON user.username = role.username WHERE user.id = :customerId AND role.role = 'CUSTOMER'")
+    SystemUser getCustomerById(@Param("customerId") Long customerId);
 }

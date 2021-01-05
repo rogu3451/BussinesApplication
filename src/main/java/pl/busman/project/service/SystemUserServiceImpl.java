@@ -111,6 +111,11 @@ public class SystemUserServiceImpl implements SystemUserService {
        return systemUserRepository.getUsernameById(id);
     }
 
+    @Override
+    public SystemUser getCustomerById(Long customerId) {
+        return systemUserRepository.getCustomerById(customerId);
+    }
+
 }
 
 

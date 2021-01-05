@@ -59,27 +59,8 @@ public class AdminController {
 
     @PostMapping("/addProject")
     public String addProject(@Valid Project project, BindingResult bindingResult, Model model){
-            if(bindingResult.hasErrors()){
-                System.out.println("There were errors");
-                bindingResult.getAllErrors().forEach(error -> {
-                    System.out.println(error.getObjectName() + " " + error.getDefaultMessage()  );
-                });
-                return "admin/addProject";
-            }else {
-
-
-            if(project.getId()==null){
-                projectService.addProject(project);
-                Project emptyProject = new Project();
-                model.addAttribute("project",emptyProject);
-                model.addAttribute("message","The project has been added.");
-            } else {
-                projectService.addProject(project);
-                model.addAttribute("message","The project has been modified.");
-            }
-
+            projectService.addProject(project,bindingResult,model);
             return "admin/addProject";
-        }
     }
 
     @GetMapping("/editProject/{id}")

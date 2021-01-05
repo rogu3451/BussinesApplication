@@ -2,14 +2,20 @@ package pl.busman.project.model;
 
 
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Entity
+@Getter
+@Setter
 public class Project {
 
     @Id
@@ -17,14 +23,18 @@ public class Project {
     private Long id;
 
     @NotNull
-    @Size(min=2, max=40, message = "Name of project should be between 2 and 40 characters")
+    @Size(min=2, max=50, message = "Name of project should be between 2 and 50 characters")
     private String name;
 
     @NotNull
-    @Size(min=2, max=500, message = "Description of project should be between 2 and 500 characters")
+    @Size(min=10, message = "Description of project should have minimum 10 characters")
     private String description;
 
-    public Project(Long id, String name, String description) {
+    @NotNull
+    @Min(value=0, message = "Incorrect customer id. Id should be a number higher or equal 0")
+    private Long customerId;
+
+    public Project(Long id, String name, String description,  Long customerId) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -32,27 +42,4 @@ public class Project {
 
     public Project(){}
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
 }
