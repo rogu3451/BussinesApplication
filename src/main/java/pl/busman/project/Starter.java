@@ -5,11 +5,12 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-import pl.busman.project.model.Project;
 import pl.busman.project.model.Role;
 import pl.busman.project.model.SystemUser;
 import pl.busman.project.repository.RoleRepository;
 import pl.busman.project.repository.SystemUserRepository;
+
+import java.util.Properties;
 
 
 @Component
@@ -27,9 +28,12 @@ public class Starter implements CommandLineRunner {
     @Transactional
     public void run(String... args) throws Exception {  // przyjmuje dowolna ilosc stringow
 
-        loadData();
+
+        //loadData();
 
     }
+
+
 
     private void loadData (){
         try{

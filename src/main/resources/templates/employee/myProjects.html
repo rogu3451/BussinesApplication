@@ -2,6 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="employee/employeeNavbar :: html_head">
 </head>
+<link th:href="@{/css/myTasks.css}" rel="stylesheet" />
 <body>
     <div th:replace="employee/employeeNavbar :: navbar"></div>
 
@@ -25,7 +26,20 @@
                 <tr>
                     <td th:text="${project.id}"></td>
                     <td th:text="${project.name}"></td>
-                    <td th:text="${project.description}"></td>
+                    <td>
+                        <button type="button" th:onclick="|showDescription('${project.id}')|">Details</button>
+                        <div th:id="'popup'+${project.id}" class="popup-wrapper hide">
+                            <div class="popup-content">
+                                <div class="popup-title">
+                                    <button type="button" class="popup-close" th:onclick="|closeDescription('${project.id}')|">&times;</button>
+                                    <h3>Description of project: "<span th:text="${project.name}"></span>"</h3>
+                                </div>
+                                <div class="popup-body">
+                                    <textarea type="text" class="form-control" rows="17" th:text="${project.description}"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
                     <td><a th:href="${'/employee/project/'+project.id+'/tasks'}">My Tasks</a></td>
                 </tr>
             </tbody>
@@ -35,4 +49,5 @@
 
     <div th:replace="footer :: footer"></div>
 </body>
+<script type="text/javascript" th:src="@{/js/description.js}"></script>
 </html>

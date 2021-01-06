@@ -2,6 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="admin/adminNavbar :: html_head">
 </head>
+<link th:href="@{/css/myTasks.css}" rel="stylesheet" />
 <body>
 <div th:replace="admin/adminNavbar :: navbar"></div>
 <div class="container" style="min-height: 82.5vh;">
@@ -27,7 +28,20 @@
         <tr>
             <td th:text="${task.id}"></td>
             <td th:text="${task.title}"></td>
-            <td th:text="${task.description}"></td>
+            <td>
+                <button type="button" th:onclick="|showDescription('${task.id}')|">Details</button>
+                <div th:id="'popup'+${task.id}" class="popup-wrapper hide">
+                    <div class="popup-content">
+                        <div class="popup-title">
+                            <button type="button" class="popup-close" th:onclick="|closeDescription('${task.id}')|">&times;</button>
+                            <h3>Description of task: "<span th:text="${task.title}"></span>"</h3>
+                        </div>
+                        <div class="popup-body">
+                            <textarea type="text" class="form-control" rows="17" th:text="${task.description}"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </td>
             <td th:text="${task.status}"></td>
             <td th:text="${task.employee_id}"></td>
             <td th:text="${task.neededTime}"></td>
@@ -40,4 +54,5 @@
 </div>
 <div th:replace="footer :: footer"></div>
 </body>
+<script type="text/javascript" th:src="@{/js/description.js}"></script>
 </html>

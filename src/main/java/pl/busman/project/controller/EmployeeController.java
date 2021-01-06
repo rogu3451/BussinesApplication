@@ -11,11 +11,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import pl.busman.project.model.Project;
 import pl.busman.project.model.Task;
+import pl.busman.project.model.dto.RaportGeneratorData;
 import pl.busman.project.model.dto.TaskCreationDto;
 import pl.busman.project.service.ProjectService;
 import pl.busman.project.service.TaskService;
+import pl.busman.project.service.emailSender.EmailSender;
 import pl.busman.project.service.validation.TaskValidation;
 
+import javax.validation.Valid;
 import java.util.List;
 
 
@@ -31,6 +34,9 @@ public class EmployeeController {
 
     @Autowired
     TaskValidation taskValidation;
+
+    @Autowired
+    EmailSender emailSender;
 
     @GetMapping("/myProjects")
     public String allProjects(Model model){
@@ -66,6 +72,23 @@ public class EmployeeController {
         return "employee/myTasks";
     }
 
+    @GetMapping("/generateReport")
+    public String generateMonthlyRaport(Model model){
+        RaportGeneratorData raportGeneratorData = new RaportGeneratorData();
+        model.addAttribute("data",raportGeneratorData);
+        return "employee/generateReport";
+    }
+
+    @PostMapping("/generateReport")
+    public String generateMonthlyReport(@Valid RaportGeneratorData data, Model model){
+
+        System.out.println("DANE:" +data);
+        emailSender.sendEmail();
+        RaportGeneratorData raportGeneratorData = new RaportGeneratorData();
+        model.addAttribute("data",raportGeneratorData);
+
+        return "employee/generateReport";
+    }
 
     private String getCurrentUserName(Model model){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
