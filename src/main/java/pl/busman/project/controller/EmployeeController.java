@@ -5,15 +5,14 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 import pl.busman.project.model.Project;
 import pl.busman.project.model.Task;
-import pl.busman.project.model.dto.RaportGeneratorData;
+import pl.busman.project.model.dto.DataReportEmployeeForm;
 import pl.busman.project.model.dto.TaskCreationDto;
 import pl.busman.project.service.ProjectService;
+import pl.busman.project.service.ReportGeneratorService;
 import pl.busman.project.service.TaskService;
 import pl.busman.project.service.emailSender.EmailSender;
 import pl.busman.project.service.validation.TaskValidation;
@@ -37,6 +36,9 @@ public class EmployeeController {
 
     @Autowired
     EmailSender emailSender;
+
+    @Autowired
+    ReportGeneratorService reportGeneratorService;
 
     @GetMapping("/myProjects")
     public String allProjects(Model model){
@@ -73,20 +75,18 @@ public class EmployeeController {
     }
 
     @GetMapping("/generateReport")
-    public String generateMonthlyRaport(Model model){
-        RaportGeneratorData raportGeneratorData = new RaportGeneratorData();
-        model.addAttribute("data",raportGeneratorData);
+    public String generateMonthlyReport(Model model){
+        DataReportEmployeeForm data = new DataReportEmployeeForm();
+        model.addAttribute("data", data);
         return "employee/generateReport";
     }
 
     @PostMapping("/generateReport")
-    public String generateMonthlyReport(@Valid RaportGeneratorData data, Model model){
-
-        System.out.println("DANE:" +data);
-        emailSender.sendEmail();
-        RaportGeneratorData raportGeneratorData = new RaportGeneratorData();
-        model.addAttribute("data",raportGeneratorData);
-
+    public String generateMonthlyReport(@Valid @ModelAttribute("data") DataReportEmployeeForm data, BindingResult bindingResult, Model model){
+        System.out.println("YEAR:" +data.getYear());
+        System.out.println("MONTH:" +data.getMonth());
+        System.out.println("EMAIL:" +data.getEmail());
+        reportGeneratorService.sendReport(data,bindingResult,model);
         return "employee/generateReport";
     }
 

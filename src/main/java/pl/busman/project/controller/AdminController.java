@@ -6,8 +6,6 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import pl.busman.project.model.Project;
-import pl.busman.project.model.Role;
-import pl.busman.project.model.SystemUser;
 import pl.busman.project.model.Task;
 import pl.busman.project.model.dto.ProjectWithCustomerDetalis;
 import pl.busman.project.model.dto.UserWithRole;
@@ -44,18 +42,20 @@ public class AdminController {
     @Autowired
     TaskValidation taskValidation;
 
-    @GetMapping("/addProject")
-    public String addProject(Model model){
-        Project project = new Project();
-        model.addAttribute("project",project);
-        return "admin/addProject";
-    }
+
 
     @GetMapping("/allProjects")
     public String allProjects(Model model){
         List<ProjectWithCustomerDetalis> allProjects = projectService.getAllProjectsWithCustomerDetails();
         model.addAttribute("project",allProjects);
         return "admin/allProjects";
+    }
+
+    @GetMapping("/addProject")
+    public String addProject(Model model){
+        Project project = new Project();
+        model.addAttribute("project",project);
+        return "admin/addProject";
     }
 
     @PostMapping("/addProject")

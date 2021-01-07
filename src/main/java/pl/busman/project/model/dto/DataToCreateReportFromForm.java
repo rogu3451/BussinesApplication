@@ -3,15 +3,15 @@ package pl.busman.project.model.dto;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
-@Data
-public class RaportGeneratorData {
+public class DataToCreateReportFromForm {
 
-    @Email()
+    @Email(message = "Invalid email address format")
     private String email;
 
-    private String date;
 }
