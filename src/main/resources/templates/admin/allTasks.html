@@ -46,8 +46,8 @@
             <td th:text="${task.employee_id}"></td>
             <td th:text="${task.neededTime}"></td>
             <td th:text="${task.cost}"></td>
-            <td th:text="${#temporals.format(task.dateOfCreation, 'dd-MM-yyyy')}"></td>
-            <td th:text="${#temporals.format(task.dateOfEnd, 'dd-MM-yyyy')}"></td>
+            <td th:text="${task.dateOfCreation}"></td>
+            <td th:text="${task.dateOfEnd}"></td>
         </tr>
         </tbody>
     </table>

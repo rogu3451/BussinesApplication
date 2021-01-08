@@ -66,6 +66,7 @@
          </div>
 
 
+         <p class="alert alert-danger" th:if="${anyDoneTasks}" th:text="${anyDoneTasks}"/>
          <p class="alert alert-success" th:if="${successMessage}" th:text="${successMessage}"/>
          <p class="alert alert-danger" th:if="${errorMessage}" th:text="${errorMessage}"/>
 

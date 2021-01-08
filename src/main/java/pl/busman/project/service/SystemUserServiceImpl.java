@@ -125,9 +125,15 @@ public class SystemUserServiceImpl implements SystemUserService {
         return systemUserRepository.getAllEmployees();
     }
 
-    @Override
+
     public SystemUser getEmployeeById(Long employeeId) {
         return systemUserRepository.getEmployeeById(employeeId);
+    }
+
+    public String getFullNameOfUserById(Long userId){
+        SystemUser systemUser = systemUserRepository.getUserById(userId);
+        String fullName = systemUser.getFirstName() + " " + systemUser.getLastName();
+        return fullName;
     }
 
 }

@@ -2,6 +2,7 @@ package pl.busman.project.service;
 
 import java.text.DecimalFormat;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -59,7 +60,8 @@ public class TaskServiceImpl implements TaskService {
     private void checkStatus(Task task) {
         if("DONE".equals(task.getStatus()))
         {
-            task.setDateOfEnd(LocalDateTime.now());
+            DateTimeFormatter date = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            task.setDateOfEnd(LocalDateTime.now().format(date));
         }else{
             task.setDateOfEnd(null);
         }

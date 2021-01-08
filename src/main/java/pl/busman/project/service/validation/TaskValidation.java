@@ -46,6 +46,11 @@ public class TaskValidation {
             errors++;
         }
 
+        if(task.getDescription().length() < 10){
+            model.addAttribute("tooShortDescription","Description should have minimum 10 characters. Now is "+task.getDescription().length()+" characters in your description.");
+            errors++;
+        }
+
         if(errors!=0){
             return false; // something went wrong
         }else{

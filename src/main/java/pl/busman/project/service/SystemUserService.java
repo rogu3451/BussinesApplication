@@ -35,5 +35,8 @@ public interface SystemUserService {
     List<SystemUser> getAllEmployees();
 
     SystemUser getEmployeeById(Long employeeId);
+
+    String getFullNameOfUserById(Long userId);
+
 }
 

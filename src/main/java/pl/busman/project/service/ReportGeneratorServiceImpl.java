@@ -8,13 +8,17 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 import org.springframework.validation.BindingResult;
-import pl.busman.project.model.Role;
+import pl.busman.project.model.Project;
 import pl.busman.project.model.dto.DataReportEmployeeForm;
-import pl.busman.project.model.dto.DataToCreateReportFromForm;
+import pl.busman.project.model.dto.EmployeeReportBuilder;
+import pl.busman.project.repository.ReportRepository;
+import pl.busman.project.repository.SystemUserRepository;
 import pl.busman.project.service.emailSender.EmailSender;
 import pl.busman.project.service.validation.ReportValidation;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Service
@@ -27,12 +31,22 @@ public class ReportGeneratorServiceImpl implements ReportGeneratorService {
     EmailSender emailSender;
 
     @Autowired
-    private Configuration config;
+    Configuration config;
 
-    public void sendReport(DataReportEmployeeForm data, BindingResult bindingResult, Model model) {
-        if (reportValidation.validateEmployeeFormData(data, bindingResult, model)) {
+    @Autowired
+    ReportRepository reportRepository;
+
+    @Autowired
+    SystemUserRepository systemUserRepository;
+
+    @Autowired
+    SystemUserService systemUserService;
+
+    public void sendReport(DataReportEmployeeForm data, BindingResult bindingResult, Model model, String employeeUsername) {
+        if (reportValidation.validateEmployeeFormData(data, bindingResult, model, employeeUsername, getDateString(data.getYear(),data.getMonth()))) {
             try{
-                emailSender.sendEmail(data.getEmail(),getEmployeeHTMLTemplate(employeeDataReportBuilder()));
+                Map<String, Object> reportData = employeeDataReportBuilder(employeeUsername, data);
+                emailSender.sendEmail(data.getEmail(),getEmployeeHTMLTemplate(reportData));
             }catch (Exception e){
                 System.out.println("Error email sending "+e);
             }
@@ -44,33 +58,97 @@ public class ReportGeneratorServiceImpl implements ReportGeneratorService {
         }
     }
 
-    public Map<String, Object> employeeDataReportBuilder(){
+    public Map<String, Object> employeeDataReportBuilder(String employeeUsername, DataReportEmployeeForm data){
 
-        List<String> messages = Arrays.asList("1", "2", "3", "4", "5");
-        List<Role> roles = new ArrayList<>();
-        Role role1 = new Role("ADMIN1","ADMIN1");
-        Role role2 = new Role("ADMIN1","ADMIN1");
-        Role role3 = new Role("ADMIN1","ADMIN1");
-        Role role4 = new Role("ADMIN1","ADMIN1");
-        Role role5 = new Role("ADMIN1","ADMIN1");
+        Long employeeId = systemUserRepository.getIdByUsername(employeeUsername);
+        String fullName = systemUserService.getFullNameOfUserById(employeeId);
+        String convertedDate = getDateString(data.getYear(),data.getMonth());
+        List<Project> projects= reportRepository.getProjectsByEmployeeAndDateIdWhereExistsDoneTasks(employeeId,convertedDate);
+        Double totalHours = reportRepository.getTotalWorkHoursPerMonthAndYear(employeeId,convertedDate);
+        EmployeeReportBuilder projectsWithTasks[] = new EmployeeReportBuilder[projects.size()];
 
-        roles.add(role1);
-        roles.add(role2);
-        roles.add(role3);
-        roles.add(role4);
-        roles.add(role5);
-        Map<String, Object> model1 = new HashMap<>();
-        model1.put("user","karolek");
-        model1.put("messages",messages);
-        model1.put("roles",roles);
 
-        return model1;
+        for(int i=0; i<projects.size(); i++) {
+            projectsWithTasks[i] = new EmployeeReportBuilder(projects.get(i).getName());
+            projectsWithTasks[i].setProjectTasks(reportRepository.getDoneProjectTasksByProjectIdAndDate(projects.get(i).getId(), convertedDate));
+         }
+
+        Map<String, Object> model = new HashMap<>();
+        model.put("projects",projectsWithTasks);
+        model.put("date",getCurrentDate());
+        model.put("time",getCurrentTime());
+        model.put("month",getMonthAsString(data.getMonth()));
+        model.put("year",data.getYear().toString());
+        model.put("fullName",fullName);
+        model.put("totalHours",totalHours);
+
+        return model;
+    }
+
+    private String getMonthAsString(Long month) {
+        if(month == 1){
+            return "January";
+        }
+        if(month == 2){
+            return "February";
+        }
+        if(month == 3){
+            return "March";
+        }
+        if(month == 4){
+            return "April";
+        }
+        if(month == 5){
+            return "May";
+        }
+        if(month == 6){
+            return "June";
+        }
+        if(month == 7){
+            return "July";
+        }
+        if(month == 8){
+            return "August";
+        }
+        if(month == 9){
+            return "September";
+        }
+        if(month == 10){
+            return "October";
+        }
+        if(month == 11){
+            return "November";
+        }
+        if(month == 12){
+            return "December";
+        }
+        else{
+            return "Incorrect month";
+        }
+    }
+
+    private String getCurrentDate() {
+        DateTimeFormatter date = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        return LocalDateTime.now().format(date);
+    }
+
+    private String getCurrentTime() {
+        DateTimeFormatter time = DateTimeFormatter.ofPattern("HH:mm:ss");
+        return LocalDateTime.now().format(time);
     }
 
     public String getEmployeeHTMLTemplate(Map<String, Object> model) throws IOException, TemplateException {
         Template templatePath = config.getTemplate("/dto/employeeReport.ftl");
         String html = FreeMarkerTemplateUtils.processTemplateIntoString(templatePath, model);
         return html;
+    }
+
+    private String getDateString(Long year, Long month){
+        if(month<10){
+            return year+"-0"+month;
+        }else{
+            return year+"-"+month;
+        }
     }
 
 }

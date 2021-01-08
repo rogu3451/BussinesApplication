@@ -76,6 +76,7 @@ public class EmployeeController {
 
     @GetMapping("/generateReport")
     public String generateMonthlyReport(Model model){
+        String currentUserName = getCurrentUserName(model);
         DataReportEmployeeForm data = new DataReportEmployeeForm();
         model.addAttribute("data", data);
         return "employee/generateReport";
@@ -83,10 +84,11 @@ public class EmployeeController {
 
     @PostMapping("/generateReport")
     public String generateMonthlyReport(@Valid @ModelAttribute("data") DataReportEmployeeForm data, BindingResult bindingResult, Model model){
+        String currentUserName = getCurrentUserName(model);
         System.out.println("YEAR:" +data.getYear());
         System.out.println("MONTH:" +data.getMonth());
         System.out.println("EMAIL:" +data.getEmail());
-        reportGeneratorService.sendReport(data,bindingResult,model);
+        reportGeneratorService.sendReport(data,bindingResult,model,currentUserName);
         return "employee/generateReport";
     }
 

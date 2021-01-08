@@ -20,6 +20,7 @@
             <label class="control-label">Description:</label>
             <textarea type="text" class="form-control" rows="7" th:field="*{description}"/>
             <p class="alert alert-danger" th:if="${tooLongDescription}" th:text="${tooLongDescription}"/>
+            <p class="alert alert-danger" th:if="${tooShortDescription}" th:text="${tooShortDescription}"/>
         </div>
         <div class="form-group">
             <label class="control-label">Select employee who will be responsible the task:</label>

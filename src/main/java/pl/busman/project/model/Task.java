@@ -9,6 +9,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Entity
 @Getter
@@ -37,16 +38,19 @@ public class Task {
 
     private Double neededTime = 0.0;
 
+    @Transient
+    DateTimeFormatter date = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
     @NotNull
-    private LocalDateTime dateOfCreation = LocalDateTime.now();
+    private String dateOfCreation =  LocalDateTime.now().format(date);
 
     private Double cost = 0.0;
 
-    private LocalDateTime dateOfEnd;
+    private String dateOfEnd;
 
     public Task(){}
 
-    public Task(Long id, Long project_id,  Long employee_id,  String title, String description,  String status, Double neededTime,  LocalDateTime dateOfCreation, Double cost, LocalDateTime dateOfEnd) {
+    public Task(Long id, Long project_id,  Long employee_id,  String title, String description,  String status, Double neededTime,  String dateOfCreation, Double cost, String dateOfEnd) {
         this.id = id;
         this.project_id = project_id;
         this.employee_id = employee_id;

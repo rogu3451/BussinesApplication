@@ -7,5 +7,5 @@ import pl.busman.project.model.dto.DataToCreateReportFromForm;
 
 public interface ReportGeneratorService {
 
-    void sendReport(DataReportEmployeeForm data, BindingResult bindingResult, Model model);
+    void sendReport(DataReportEmployeeForm data, BindingResult bindingResult, Model model, String currentUserName);
 }
