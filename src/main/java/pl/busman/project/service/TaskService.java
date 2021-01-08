@@ -11,7 +11,7 @@ public interface TaskService {
 
     void updateTasks(List<Task> tasks);
 
-    List<Task> getAllTasksById(Long id);
+    List<Task> getAllTasksByProjectId(Long id);
 
     List<Task> getAllTasksByUsernameAndProjectId(String username, Long projectId);
 

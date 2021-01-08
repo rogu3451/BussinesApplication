@@ -42,7 +42,7 @@ public class EmployeeController {
 
     @GetMapping("/myProjects")
     public String allProjects(Model model){
-        List<Project> myProjects = projectService.getAllProjectsByUsername(getCurrentUserName(model));
+        List<Project> myProjects = projectService.getAllProjectsForEmployeeByUsername(getCurrentUserName(model));
         model.addAttribute("project",myProjects);
         return "employee/myProjects";
     }

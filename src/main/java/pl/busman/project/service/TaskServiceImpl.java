@@ -67,7 +67,7 @@ public class TaskServiceImpl implements TaskService {
         }
     }
 
-    public List<Task> getAllTasksById(Long id) {
+    public List<Task> getAllTasksByProjectId(Long id) {
         return  (List<Task>)taskRepository.findAllByProject_id(id);
     }
 

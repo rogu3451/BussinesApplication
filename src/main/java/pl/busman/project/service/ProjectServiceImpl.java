@@ -37,10 +37,16 @@ public class ProjectServiceImpl implements ProjectService {
         return projectRespository.findAll(Sort.by(Sort.Direction.ASC, "id"));
     }
 
+
+    public List<Project> getAllProjectsForEmployeeByUsername(String username) {
+        Long employeeId = systemUserRepository.getIdByUsername(username);
+        return (List<Project>) projectRespository.getAllProjectsForEmployeeById(employeeId);
+    }
+
     @Override
-    public List<Project> getAllProjectsByUsername(String username) {
-        Long usernameId = systemUserRepository.getIdByUsername(username);
-        return (List<Project>) projectRespository.getAllProjectsByUserId(usernameId);
+    public List<Project> getAllProjectsForCustomerByUsername(String username) {
+        Long customerId = systemUserRepository.getIdByUsername(username);
+        return (List<Project>) projectRespository.getAllProjectsForCustomerById(customerId);
     }
 
     public void addProject(Project project, BindingResult bindingResult, Model model) {

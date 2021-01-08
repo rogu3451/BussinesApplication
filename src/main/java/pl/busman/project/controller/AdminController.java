@@ -162,7 +162,7 @@ public class AdminController {
 
     @GetMapping("/project/{id}/tasks")
     public String projectsTasks(@PathVariable("id") Long id, Model model){
-        List<Task> tasks = taskService.getAllTasksById(id);
+        List<Task> tasks = taskService.getAllTasksByProjectId(id);
         model.addAttribute("tasks",tasks);
         model.addAttribute("projectId",id);
         return "admin/allTasks";

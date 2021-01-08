@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="customer/customerNavbar :: html_head">
+</head>
+<link th:href="@{/css/myTasks.css}" rel="stylesheet" />
+<body>
+<div th:replace="customer/customerNavbar :: navbar"></div>
+
+<div class="container" style="min-height: 82.5vh;">
+    <h3>My projects</h3>
+    <table class="table">
+        <thead>
+        <tr>
+            <td>Id</td>
+            <td>Name</td>
+            <td>Description</td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        </thead>
+        <tr th:if="${project.empty}">
+            <td colspan="2"> No Projects Available </td>
+        </tr>
+        <tbody th:each = "project : ${project}">
+        <tr>
+            <td th:text="${project.id}"></td>
+            <td th:text="${project.name}"></td>
+            <td>
+                <button type="button" th:onclick="|showDescription('${project.id}')|">Details</button>
+                <div th:id="'popup'+${project.id}" class="popup-wrapper hide">
+                    <div class="popup-content">
+                        <div class="popup-title">
+                            <button type="button" class="popup-close" th:onclick="|closeDescription('${project.id}')|">&times;</button>
+                            <h3>Description of project: "<span th:text="${project.name}"></span>"</h3>
+                        </div>
+                        <div class="popup-body">
+                            <textarea type="text" class="form-control" rows="17" th:text="${project.description}"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </td>
+            <td><a th:href="${'/customer/project/'+project.id+'/progress'}">Progress preview</a></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+
+<div th:replace="footer :: footer"></div>
+</body>
+<script type="text/javascript" th:src="@{/js/description.js}"></script>
+</html>

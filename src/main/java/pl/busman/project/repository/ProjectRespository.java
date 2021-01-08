@@ -20,7 +20,7 @@ public interface ProjectRespository extends JpaRepository<Project, Long> {
 
     @Query("SELECT new pl.busman.project.model.Project(project.id, project.name, project.description,project.customerId) " +
             "FROM Project project WHERE project.id IN (SELECT task.project_id FROM Task task WHERE task.employee_id = :id)")
-    Collection<Project> getAllProjectsByUserId(@Param("id") Long id);
+    Collection<Project> getAllProjectsForEmployeeById(@Param("id") Long id);
 
 
     @Query("SELECT new pl.busman.project.model.dto.ProjectWithCustomerDetalis(project.id, project.name, project.description, systemUser.firstName, systemUser.lastName) " +
@@ -33,4 +33,9 @@ public interface ProjectRespository extends JpaRepository<Project, Long> {
     @Modifying
     @Query("UPDATE Project project SET project.name = :name, project.description = :description, project.customerId = :customerId  WHERE project.id = :projectId")
     void  updateProject(@Param("projectId") Long projectId, @Param("name") String name, @Param("description") String description, @Param("customerId") Long customerId);
+
+
+    @Query("SELECT new pl.busman.project.model.Project(project.id, project.name, project.description,project.customerId) " +
+            "FROM Project project WHERE project.customerId = :id")
+    Collection<Project> getAllProjectsForCustomerById(@Param("id") Long id);
 }

@@ -13,7 +13,9 @@ public interface ProjectService {
 
     List<Project> getAllProjects();
 
-    List<Project> getAllProjectsByUsername(String username);
+    List<Project> getAllProjectsForEmployeeByUsername(String username);
+
+    List<Project> getAllProjectsForCustomerByUsername(String username);
 
     void addProject(Project project, BindingResult bindingResult, Model model);
 
