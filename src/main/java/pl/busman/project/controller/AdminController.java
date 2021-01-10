@@ -5,6 +5,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.view.RedirectView;
 import pl.busman.project.model.Project;
 import pl.busman.project.model.Task;
 import pl.busman.project.model.dto.ProjectWithCustomerDetalis;
@@ -141,9 +143,17 @@ public class AdminController {
     }
 
     @GetMapping("/deleteUser/{id}")
-    public String deleteUser(@PathVariable("id") Long id){
-            systemUserService.deleteSystemUser(id);
-            return "redirect:/admin/allUsers";
+    public RedirectView deleteUser(@PathVariable("id") Long userId, Model model, RedirectAttributes redirectAttrs){
+
+            if(!userValidation.checkIfLastAdmin(userId)){
+                systemUserService.deleteSystemUser(userId);
+                redirectAttrs.addFlashAttribute("successMessage","User with id: "+userId+" has been deleted");
+            }else{
+                redirectAttrs.addFlashAttribute("lastAdmin","You can't delete last admin from system");
+            }
+
+
+            return new RedirectView("/admin/allUsers",true);
     }
 
     @GetMapping("/editProject/addTask/{id}")

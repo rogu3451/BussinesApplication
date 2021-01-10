@@ -14,11 +14,13 @@
             <input type="text" class="form-control" th:field="*{title}"/>
             <input type="hidden" class="form-control" th:field="*{project_id}"/>
             <p class="alert alert-danger" th:if="${emptyTitle}" th:text="${emptyTitle}"/>
+            <p class="alert alert-danger" th:if="${specialCharactersExists1}" th:text="${specialCharactersExists1}"/>
             <p class="alert alert-danger" th:if="${tooShortTitle}" th:text="${tooShortTitle}"/>
         </div>
         <div class="form-group">
             <label class="control-label">Description:</label>
             <textarea type="text" class="form-control" rows="7" th:field="*{description}"/>
+            <p class="alert alert-danger" th:if="${specialCharactersExists2}" th:text="${specialCharactersExists2}"/>
             <p class="alert alert-danger" th:if="${tooLongDescription}" th:text="${tooLongDescription}"/>
             <p class="alert alert-danger" th:if="${tooShortDescription}" th:text="${tooShortDescription}"/>
         </div>

@@ -23,11 +23,13 @@
             <td th:text="${systemUser.firstName}"></td>
             <td th:text="${systemUser.lastName}"></td>
             <td th:text="${systemUser.role}"></td>
-            <td><a th:href="${'/admin/editUser/'+systemUser.userId}">Edit</a></td>
-            <td><a onclick="alert('Are you sure that you want to delete the user ?')" th:href="${'/admin/deleteUser/'+systemUser.userId}">Delete</a></td>
+            <td><a th:href="${'/admin/editUser/'+systemUser.userId}" >Edit</a></td>
+            <td><a onclick="alert('Are you sure that you want to delete the user ?')" th:href="${'/admin/deleteUser/'+systemUser.userId}" >Delete</a></td>
         </tr>
         </tbody>
     </table>
+    <p class="alert alert-danger" th:if="${lastAdmin}" th:text="${lastAdmin}"/>
+    <p class="alert alert-success" th:if="${successMessage}" th:text="${successMessage}"/>
 </div>
 <div th:replace="footer :: footer"></div>
 </body>

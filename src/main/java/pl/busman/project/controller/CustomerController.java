@@ -41,6 +41,7 @@ public class CustomerController {
 
     @GetMapping("/project/{projectId}/progress")
     public String getAllTasksForSpecificProject(@PathVariable("projectId") Long projectId, Model model){
+        String currentUserName = Utils.getCurrentUserName(model);
         List<Task> tasks = taskService.getAllTasksByProjectId(projectId);
         model.addAttribute("tasks",tasks);
         model.addAttribute("projectId",projectId);

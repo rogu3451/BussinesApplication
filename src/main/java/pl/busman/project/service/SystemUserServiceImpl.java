@@ -136,6 +136,11 @@ public class SystemUserServiceImpl implements SystemUserService {
         return fullName;
     }
 
+    @Override
+    public Long getCountOfAdminsInSystem() {
+        return systemUserRepository.getCountOfAdminsInSystem();
+    }
+
 }
 
 

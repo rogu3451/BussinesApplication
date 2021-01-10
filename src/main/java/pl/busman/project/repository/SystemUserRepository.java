@@ -77,6 +77,6 @@ public interface SystemUserRepository extends JpaRepository<SystemUser,Long> {
             "INNER JOIN Role role ON user.username = role.username WHERE user.id = :userId")
     SystemUser getUserById(@Param("userId") Long userId);
 
-
-
+    @Query("SELECT COUNT(role.id) FROM  Role role WHERE role.role = 'ADMIN'")
+    Long getCountOfAdminsInSystem();
 }

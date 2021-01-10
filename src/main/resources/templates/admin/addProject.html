@@ -14,11 +14,13 @@
             <input type="hidden" class="form-control" th:field="*{id}"/>
             <input type="text" class="form-control" th:field="*{name}"/>
             <p  class="alert alert-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"/>
+            <p class="alert alert-danger" th:if="${specialCharactersExists1}" th:text="${specialCharactersExists1}"/>
         </div>
         <div class="form-group">
             <label class="control-label">Description:</label>
             <textarea type="text" class="form-control" rows="7" th:field="*{description}"/>
             <p class="alert alert-danger" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"/>
+            <p class="alert alert-danger" th:if="${specialCharactersExists2}" th:text="${specialCharactersExists2}"/>
         </div>
         <div class="form-group">
             <label class="control-label">Select customer who will be owner of the project:</label>
@@ -28,7 +30,6 @@
 
         <p class="alert alert-danger" th:if="${#fields.hasErrors('customerId')}" th:errors="*{customerId}"/>
         <p class="alert alert-danger" th:if="${customerDoesNotExist}" th:text="${customerDoesNotExist}"/>
-
         <p class="alert alert-success" th:if="${successMessage}" th:text="${successMessage}"/>
         <p class="alert alert-danger" th:if="${errorMessage}" th:text="${errorMessage}"/>
         <div class="row">

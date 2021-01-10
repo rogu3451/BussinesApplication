@@ -27,5 +27,9 @@ public interface RoleRepository extends JpaRepository<Role, Long> {
     @Query("UPDATE Role role SET role.username = :username, role.role = :role WHERE role.id = :roleId")
     void updateRoleById(@Param("username") String username, @Param("role") String role, @Param("roleId") Long roleId);
 
+
+    @Query("SELECT role.role FROM Role role " +
+            "WHERE role.username = :username")
+    String getRoleByUsername(@Param("username") String username);
 }
 

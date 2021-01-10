@@ -15,12 +15,14 @@
             <label class="control-label">First name:</label>
             <input type="text" class="form-control" th:field="*{systemUser.firstName}"/>
             <p class="alert alert-danger" th:if="${firstNameIsNull}" th:text="${firstNameIsNull}"/>
+            <p class="alert alert-danger" th:if="${specialCharactersExists1}" th:text="${specialCharactersExists1}"/>
         </div>
 
         <div class="form-group">
             <label class="control-label">Last name:</label>
             <input type="text" class="form-control" th:field="*{systemUser.lastName}"/>
             <p class="alert alert-danger" th:if="${lastNameIsNull}" th:text="${lastNameIsNull}"/>
+            <p class="alert alert-danger" th:if="${specialCharactersExists2}" th:text="${specialCharactersExists2}"/>
         </div>
 
         <div class="form-group">
@@ -28,6 +30,7 @@
             <input type="text" class="form-control" th:field="*{systemUser.username}"/>
             <p class="alert alert-danger" th:if="${incorrectLengthOfUsername}" th:text="${incorrectLengthOfUsername}"/>
             <p class="alert alert-danger" th:if="${usernameAllreadyExist}" th:text="${usernameAllreadyExist}"/>
+            <p class="alert alert-danger" th:if="${specialCharactersExists3}" th:text="${specialCharactersExists3 }"/>
         </div>
         <div class="form-group">
             <label class="control-label">Password:</label>

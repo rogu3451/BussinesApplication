@@ -38,5 +38,6 @@ public interface SystemUserService {
 
     String getFullNameOfUserById(Long userId);
 
+    Long getCountOfAdminsInSystem();
 }
 

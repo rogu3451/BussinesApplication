@@ -16,4 +16,6 @@ public interface RoleService {
     void deleteRole(Long id);
 
     Role createRole(UsersWithRoleQuery usersWithRoleQuery);
+
+    String getRoleByUsername(String username);
 }

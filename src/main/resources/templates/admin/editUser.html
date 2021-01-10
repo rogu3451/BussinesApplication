@@ -15,18 +15,21 @@
         <div class="form-group">
             <label class="control-label">First name:</label>
             <input type="text" class="form-control" th:field="*{firstName}"/>
+            <p class="alert alert-danger" th:if="${specialCharactersExists1}" th:text="${specialCharactersExists1 }"/>
             <p class="alert alert-danger" th:if="${firstNameIsNull}" th:text="${firstNameIsNull}"/>
         </div>
 
         <div class="form-group">
             <label class="control-label">Last name:</label>
             <input type="text" class="form-control" th:field="*{lastName}"/>
+            <p class="alert alert-danger" th:if="${specialCharactersExists2}" th:text="${specialCharactersExists2}"/>
             <p class="alert alert-danger" th:if="${lastNameIsNull}" th:text="${lastNameIsNull}"/>
         </div>
 
         <div class="form-group">
             <label class="control-label">Username:</label>
             <input type="text" class="form-control" th:field="*{username}"/>
+            <p class="alert alert-danger" th:if="${specialCharactersExists3}" th:text="${specialCharactersExists3}"/>
              <p class="alert alert-danger" th:if="${incorrectLengthOfUsername}" th:text="${incorrectLengthOfUsername}"/>
             <p class="alert alert-danger" th:if="${usernameAllreadyExist}" th:text="${usernameAllreadyExist}"/>
         </div>
@@ -45,6 +48,7 @@
         </select>
 
         <!--<p class="alert alert-danger" th:if="${#fields.hasErrors('role.role')}" th:errors="*{role.role}"/> -->
+        <p class="alert alert-danger" th:if="${lastAdmin}" th:text="${lastAdmin}"/>
         <p class="alert alert-success" th:if="${successMessage}" th:text="${successMessage}"/>
         <p class="alert alert-danger" th:if="${nothingHasChanged}" th:text="${nothingHasChanged}"/>
         <p class="alert alert-danger" th:if="${errorMessage}" th:text="${errorMessage}"/>

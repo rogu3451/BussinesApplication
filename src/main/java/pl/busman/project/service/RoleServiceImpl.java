@@ -55,5 +55,10 @@ public class RoleServiceImpl implements RoleService {
         return new Role(usersWithRoleQuery.getRoleId(),usersWithRoleQuery.getUsername(),usersWithRoleQuery.getRole());
     }
 
+    @Override
+    public String getRoleByUsername(String username) {
+        return roleRepository.getRoleByUsername(username);
+    }
+
 
 }

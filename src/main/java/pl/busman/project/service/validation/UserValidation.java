@@ -10,6 +10,7 @@ import pl.busman.project.model.dto.UserWithRole;
 import pl.busman.project.model.dto.UsersWithRoleQuery;
 import pl.busman.project.service.RoleService;
 import pl.busman.project.service.SystemUserService;
+import pl.busman.project.service.Utils;
 
 @Component
 public class UserValidation {
@@ -32,6 +33,11 @@ public class UserValidation {
         if(!checkLengthOfUsername(userWithRole.getSystemUser().getUsername())){
             model.addAttribute("incorrectLengthOfUsername","Username should be between 5 and 20 characters.");
             errors++;
+        }else{
+            if(Utils.checkIfSpecialCharactersExists(userWithRole.getSystemUser().getUsername())){
+                model.addAttribute("specialCharactersExists3","You can't use special characters in this field");
+                errors++;
+            }
         }
 
         if(checkIfUsernameExist(userWithRole.getSystemUser().getUsername())){
@@ -42,10 +48,24 @@ public class UserValidation {
         if(isNull(userWithRole.getSystemUser().getFirstName())){
             model.addAttribute("firstNameIsNull","First name can not be null.");
             errors++;
+        }else{
+            if(Utils.checkIfSpecialCharactersExists(userWithRole.getSystemUser().getFirstName())){
+                model.addAttribute("specialCharactersExists1","You can't use special characters in this field");
+                errors++;
+            }
         }
 
         if(isNull(userWithRole.getSystemUser().getLastName())){
             model.addAttribute("lastNameIsNull","Last name can not be null.");
+            errors++;
+        }else{
+            if(Utils.checkIfSpecialCharactersExists(userWithRole.getSystemUser().getLastName())){
+                model.addAttribute("specialCharactersExists2","You can't use special characters in this field");
+                errors++;
+            }
+        }
+
+        if(!"EMPLOYEE".equals(userWithRole.getRole().getRole()) && !"CUSTOMER".equals(userWithRole.getRole().getRole())  && !"ADMIN".equals(userWithRole.getRole().getRole())){
             errors++;
         }
 
@@ -97,11 +117,16 @@ public class UserValidation {
                 if(!checkLengthOfUsername(username)){
                     model.addAttribute("incorrectLengthOfUsername","Username should be between 5 and 20 characters.");
                     errors++;
+                }else{
+                    if(Utils.checkIfSpecialCharactersExists(username)){
+                        model.addAttribute("specialCharactersExists3","You can't use special characters in this field");
+                        errors++;
+                    }
                 }
 
                 if(checkIfUsernameExist(username)){
                     if(!username.equals(getUsernameById(userId))){
-                        model.addAttribute("usernameAllreadyExist","Username allready exist.");
+                        model.addAttribute("usernameAllreadyExist","Username already exist.");
                         errors++;
                     }
                 }
@@ -109,10 +134,25 @@ public class UserValidation {
                 if(isNull(firstName)){
                     model.addAttribute("firstNameIsNull","First name can not be null.");
                     errors++;
+                }else{
+                    if(Utils.checkIfSpecialCharactersExists(firstName)){
+                        model.addAttribute("specialCharactersExists1","You can't use special characters in this field");
+                        errors++;
+                    }
                 }
 
                 if(isNull(lastName)){
                     model.addAttribute("lastNameIsNull","Last name can not be null.");
+                    errors++;
+                }else{
+                    if(Utils.checkIfSpecialCharactersExists(lastName)){
+                        model.addAttribute("specialCharactersExists2","You can't use special characters in this field");
+                        errors++;
+                    }
+                }
+
+                if(checkIfLastAdmin(userId)){
+                    model.addAttribute("lastAdmin","You can't change role because it is last admin in system");
                     errors++;
                 }
 
@@ -125,21 +165,6 @@ public class UserValidation {
                         model.addAttribute("invalidPassword","Invalid password. " +
                                 "Password should have minimum 6 characters, one  uppercase letter and one digit.");
                     }
-                }
-
-                if(!checkLengthOfUsername(username)){
-                    model.addAttribute("incorrectLengthOfUsername","Username should be between 5 and 20 characters.");
-                    errors++;
-                }
-
-                if(isNull(firstName)){
-                    model.addAttribute("firstNameIsNull","First name can not be null.");
-                    errors++;
-                }
-
-                if(isNull(lastName)){
-                    model.addAttribute("lastNameIsNull","Last name can not be null.");
-                    errors++;
                 }
             }
 
@@ -199,5 +224,26 @@ public class UserValidation {
         }else{
             return false;
         }
+    }
+
+    public boolean checkIfLastAdmin(Long userId) {
+        Long numberOfAdmins = systemUserService.getCountOfAdminsInSystem();
+        System.out.println(numberOfAdmins);
+        if(numberOfAdmins==1 && checkIfIdBelongToAdmin(userId)){
+            return true;
+        }else {
+            return false;
+        }
+    }
+
+    private boolean checkIfIdBelongToAdmin(Long userId) {
+        String username = systemUserService.getUsernameById(userId);
+        String role = roleService.getRoleByUsername(username);
+        if("ADMIN".equals(role)){
+            return true;
+        }else{
+            return false;
+        }
+
     }
 }

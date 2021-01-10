@@ -6,6 +6,7 @@ import org.springframework.ui.Model;
 
 public class Utils {
 
+
     public static String getCurrentUserName(Model model){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentPrincipalName = authentication.getName();
@@ -17,5 +18,20 @@ public class Utils {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentPrincipalName = authentication.getName();
         return  currentPrincipalName;
+    }
+
+    public static boolean checkIfSpecialCharactersExists(String stringToCheck){
+        if(stringToCheck!=null){
+            char[] specialCharacters = {'*', '&', '\'','\"'};
+            for(int i=0; i<stringToCheck.length(); i++){
+                for(int j=0; j<specialCharacters.length; j++){
+                    if (stringToCheck.charAt(i) == specialCharacters[j]){
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
     }
 }

@@ -8,6 +8,7 @@ import pl.busman.project.model.Project;
 import pl.busman.project.model.SystemUser;
 import pl.busman.project.service.ProjectService;
 import pl.busman.project.service.SystemUserService;
+import pl.busman.project.service.Utils;
 
 @Component
 public class ProjectValidation {
@@ -19,17 +20,36 @@ public class ProjectValidation {
     ProjectService projectService;
 
     public boolean validateProject(BindingResult bindingResult, Project project, Model model, boolean isUpdate) { // In this case validation was created with hibernate's annotations.
-        if (bindingResult.hasErrors() | !checkIfCustomerExists(project.getCustomerId(),model) | (isUpdate && !checkIfChangesOccured(project,model)) ) {
-            bindingResult.getAllErrors().forEach(error -> {
-                System.out.println(error.getObjectName() + " " + error.getDefaultMessage());
-            });
+        if (bindingResult.hasErrors() | checkIfSpecialCharactersExistInForm(project,model)
+                | !checkIfCustomerExists(project.getCustomerId(),model) | (isUpdate && !checkIfChangesOccured(project,model)) ) {
             return false;
-        } else {
+        }{
             return true;
         }
     }
 
-  
+    private boolean checkIfSpecialCharactersExistInForm(Project project, Model model) {
+        int errors = 0;
+
+        if(Utils.checkIfSpecialCharactersExists(project.getName())){
+            model.addAttribute("specialCharactersExists1","You can't use special characters in this field");
+            errors++;
+        }
+
+        if(Utils.checkIfSpecialCharactersExists(project.getDescription())){
+            model.addAttribute("specialCharactersExists2","You can't use special characters in this field");
+            errors++;
+        }
+
+        if(errors!=0){
+            return true;
+        }else {
+            return false;
+        }
+
+    }
+
+
     private boolean checkIfChangesOccured(Project projectAfterModification, Model model) {
         Project projectBeforeModification = projectService.getProject(projectAfterModification.getId());
         String modifiedName = projectAfterModification.getName();

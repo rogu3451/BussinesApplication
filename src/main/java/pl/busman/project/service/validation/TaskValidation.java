@@ -3,10 +3,12 @@ package pl.busman.project.service.validation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import pl.busman.project.model.SystemUser;
 import pl.busman.project.model.Task;
 import pl.busman.project.service.SystemUserService;
 import pl.busman.project.service.TaskService;
+import pl.busman.project.service.Utils;
 
 import java.util.List;
 
@@ -39,6 +41,11 @@ public class TaskValidation {
         if(task.getTitle().length()<3){
             model.addAttribute("tooShortTitle","Title should have minimum 3 characters.");
             errors++;
+        }else{
+            if(Utils.checkIfSpecialCharactersExists(task.getTitle())){
+                model.addAttribute("specialCharactersExists1","You can't use special characters in this field");
+                errors++;
+            }
         }
 
         if(task.getDescription().length() > 5000){
@@ -51,6 +58,14 @@ public class TaskValidation {
             errors++;
         }
 
+        if(task.getDescription().length() > 10 && task.getDescription().length() < 5000){
+                if(Utils.checkIfSpecialCharactersExists(task.getDescription())){
+                    model.addAttribute("specialCharactersExists2","You can't use special characters in this field");
+                    errors++;
+                }
+        }
+
+
         if(errors!=0){
             return false; // something went wrong
         }else{
@@ -58,28 +73,35 @@ public class TaskValidation {
         }
     }
 
-    public boolean validateTasks(List<Task> tasksAfterModification, String currentUsername, Long projectId){  // Request from Employee Controller
+    public boolean validateTasks(List<Task> tasksAfterModification, String currentUsername, Long projectId, BindingResult bindingResult){  // Request from Employee Controller
         List<Task> tasksBeforeModification = taskService.getAllTasksByUsernameAndProjectId(currentUsername,projectId);
         int numberOfTasks = tasksBeforeModification.size();
+        int errors = 0;
         int numberOfDifferences = 0;
 
         for(int i=0; i<numberOfTasks; i++){
-            System.out.println("Int i: "+i + "A");
+
             if(!tasksBeforeModification.get(i).getStatus().equals(tasksAfterModification.get(i).getStatus())){
                 numberOfDifferences++;
             }
-            System.out.println("Int i: "+i + "B");
+
             if(!tasksBeforeModification.get(i).getNeededTime().equals(tasksAfterModification.get(i).getNeededTime())){
-                    numberOfDifferences++;
+                numberOfDifferences++;
+            }
+
+            if(!"NEW".equals(tasksAfterModification.get(i).getStatus()) &&
+               !"IN_REALIZATION".equals(tasksAfterModification.get(i).getStatus())  &&
+               !"DONE".equals(tasksAfterModification.get(i).getStatus())){
+                errors++;
             }
 
         }
 
 
-        if(numberOfDifferences!=0){
-            return true; // There were any differences so we can update the data
+        if(numberOfDifferences!=0 && errors==0){
+            return true; // There are differences so we can update the data
         }else{
-            return false; // There were not any differences so we sould not update the data
+            return false; // There are not any differences so we sould not update the data
         }
 
     }

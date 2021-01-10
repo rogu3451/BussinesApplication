@@ -58,8 +58,8 @@ public class EmployeeController {
     }
 
     @PostMapping("/project/{projectId}/tasks")
-    public String saveTasks(@PathVariable("projectId") Long projectId, TaskCreationDto taskForm, Model model){
-        if(taskValidation.validateTasks(taskForm.getTasks(), Utils.getCurrentUserName(model), projectId)){
+    public String saveTasks(@PathVariable("projectId") Long projectId, TaskCreationDto taskForm, Model model, BindingResult bindingResult){
+        if(taskValidation.validateTasks(taskForm.getTasks(), Utils.getCurrentUserName(model), projectId, bindingResult)){
             taskService.updateTasks(taskForm.getTasks());
             model.addAttribute("successMessage","Tasks modified");
             model.addAttribute("projectId",projectId);
