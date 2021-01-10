@@ -9,6 +9,8 @@ import org.springframework.ui.Model;
 import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 import org.springframework.validation.BindingResult;
 import pl.busman.project.model.Project;
+import pl.busman.project.model.Task;
+import pl.busman.project.model.dto.DataReportCustomerForm;
 import pl.busman.project.model.dto.DataReportEmployeeForm;
 import pl.busman.project.model.dto.EmployeeReportBuilder;
 import pl.busman.project.repository.ReportRepository;
@@ -42,7 +44,10 @@ public class ReportGeneratorServiceImpl implements ReportGeneratorService {
     @Autowired
     SystemUserService systemUserService;
 
-    public void sendReport(DataReportEmployeeForm data, BindingResult bindingResult, Model model, String employeeUsername) {
+    @Autowired
+    ProjectService projectService;
+
+    public void sendReport(DataReportEmployeeForm data, BindingResult bindingResult, Model model, String employeeUsername) { // employee Report
         if (reportValidation.validateEmployeeFormData(data, bindingResult, model, employeeUsername, getDateString(data.getYear(),data.getMonth()))) {
             try{
                 Map<String, Object> reportData = employeeDataReportBuilder(employeeUsername, data);
@@ -57,6 +62,44 @@ public class ReportGeneratorServiceImpl implements ReportGeneratorService {
             model.addAttribute("errorMessage","There were errors.");
         }
     }
+
+    public void sendReport(DataReportCustomerForm data, BindingResult bindingResult, Model model, String customerUsername) { // customer Report
+        if (reportValidation.validateCustomerFormData(data, bindingResult, model, customerUsername)) {
+            try{
+                Map<String, Object> reportData = customerDataReportBuilder(customerUsername, data);
+                emailSender.sendEmail(data.getEmail(),getCustomerHTMLTemplate(reportData));
+            }catch (Exception e){
+                System.out.println("Error email sending "+e);
+            }
+
+            DataReportCustomerForm reportGeneratorData = new DataReportCustomerForm();
+            model.addAttribute("data", reportGeneratorData);
+        }else{
+            model.addAttribute("errorMessage","There were errors.");
+        }
+    }
+
+
+    public Map<String, Object> customerDataReportBuilder(String customerUsername, DataReportCustomerForm data){
+
+        Long customerId = systemUserRepository.getIdByUsername(customerUsername);
+        String fullName = systemUserService.getFullNameOfUserById(customerId);
+
+        String projectName = projectService.getProjectNameById(data.getProjectId());
+        List<Task> projectTasks = reportRepository.getAllDoneTasksByProjectId(data.getProjectId());
+        Double totalCost = reportRepository.getTotalCostByProjectId(data.getProjectId());
+
+        Map<String, Object> model = new HashMap<>();
+        model.put("date",getCurrentDate());
+        model.put("time",getCurrentTime());
+        model.put("projectName",projectName);
+        model.put("fullName",fullName);
+        model.put("tasks",projectTasks);
+        model.put("totalCost",totalCost);
+
+        return model;
+    }
+
 
     public Map<String, Object> employeeDataReportBuilder(String employeeUsername, DataReportEmployeeForm data){
 
@@ -139,6 +182,12 @@ public class ReportGeneratorServiceImpl implements ReportGeneratorService {
 
     public String getEmployeeHTMLTemplate(Map<String, Object> model) throws IOException, TemplateException {
         Template templatePath = config.getTemplate("/dto/employeeReport.ftl");
+        String html = FreeMarkerTemplateUtils.processTemplateIntoString(templatePath, model);
+        return html;
+    }
+
+    public String getCustomerHTMLTemplate(Map<String, Object> model) throws IOException, TemplateException {
+        Template templatePath = config.getTemplate("/dto/customerReport.ftl");
         String html = FreeMarkerTemplateUtils.processTemplateIntoString(templatePath, model);
         return html;
     }

@@ -38,4 +38,12 @@ public interface ProjectRespository extends JpaRepository<Project, Long> {
     @Query("SELECT new pl.busman.project.model.Project(project.id, project.name, project.description,project.customerId) " +
             "FROM Project project WHERE project.customerId = :id")
     Collection<Project> getAllProjectsForCustomerById(@Param("id") Long id);
+
+    @Query("SELECT project.name FROM Project project WHERE project.id = :id")
+    String getProjectNameById(@Param("id") Long projectId);
+
+
+    @Query("SELECT new pl.busman.project.model.Project(project.id, project.name, project.description,project.customerId) " +
+            "FROM Project project WHERE project.customerId = :customerId AND project.id = :projectId ")
+    List<Project> getProjectByCustomerIdAndProjectId( @Param("customerId") Long customerId,@Param("projectId") Long projectId);
 }

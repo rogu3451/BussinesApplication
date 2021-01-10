@@ -71,6 +71,11 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
 
+    public String getProjectNameById(Long projectId) {
+        return projectRespository.getProjectNameById(projectId);
+    }
+
+
     public Project getProject(Long id) {
             return projectRespository.findById(id).orElseThrow(() -> new ProjectException(ProjectError.PROJECT_NOT_FOUND));
     }

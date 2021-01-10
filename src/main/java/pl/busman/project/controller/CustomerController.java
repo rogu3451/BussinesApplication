@@ -1,19 +1,19 @@
 package pl.busman.project.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 import pl.busman.project.model.Project;
 import pl.busman.project.model.Task;
-import pl.busman.project.model.dto.TaskCreationDto;
+import pl.busman.project.model.dto.DataReportCustomerForm;
 import pl.busman.project.service.ProjectService;
+import pl.busman.project.service.ReportGeneratorService;
 import pl.busman.project.service.TaskService;
+import pl.busman.project.service.Utils;
 
+import javax.validation.Valid;
 import java.util.List;
 
 
@@ -28,10 +28,13 @@ public class CustomerController {
     @Autowired
     TaskService taskService;
 
+    @Autowired
+    ReportGeneratorService reportGeneratorService;
+
 
     @GetMapping("/myProjects")
     public String allProjects(Model model){
-        List<Project> myProjects = projectService.getAllProjectsForCustomerByUsername(getCurrentUserName(model));
+        List<Project> myProjects = projectService.getAllProjectsForCustomerByUsername(Utils.getCurrentUserName(model));
         model.addAttribute("project",myProjects);
         return "customer/myProjects";
     }
@@ -44,10 +47,19 @@ public class CustomerController {
         return "customer/tasks";
     }
 
-    private String getCurrentUserName(Model model){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String currentPrincipalName = authentication.getName();
-        model.addAttribute("name",currentPrincipalName);
-        return  currentPrincipalName;
+    @GetMapping("/generateReport")
+    public String generateFinancialReportForCustomer(Model model){
+        String currentUserName = Utils.getCurrentUserName(model);
+        DataReportCustomerForm data = new DataReportCustomerForm();
+        model.addAttribute("data", data);
+        return "customer/generateReport";
     }
+
+    @PostMapping("/generateReport")
+    public String generateFinancialReportForCustomer(@Valid @ModelAttribute("data") DataReportCustomerForm data, BindingResult bindingResult, Model model){
+        String currentUserName = Utils.getCurrentUserName(model);
+        reportGeneratorService.sendReport(data,bindingResult,model,currentUserName);
+        return "customer/generateReport";
+    }
+
 }

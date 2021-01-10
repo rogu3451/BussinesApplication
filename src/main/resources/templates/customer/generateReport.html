@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="customer/customerNavbar :: html_head">
+</head>
+
+<body>
+<div th:replace="customer/customerNavbar :: navbar"></div>
+
+<div class="container" style="min-height: 82.5vh;">
+    <h3>Generate financial report for specific project</h3>
+
+    <form class="form-horizontal" th:object="${data}" th:action="@{/customer/generateReport}" th:method="post">
+
+        <div class="form-group">
+            <label class="control-label">Select project:</label>
+            <br>
+            <select id="projects" class="form-control" th:field="*{projectId}"></select>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label">Email:</label>
+            <input type="text" class="form-control" th:field="*{email}"/>
+            <p class="alert alert-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"/>
+            <p class="alert alert-danger" th:if="${emptyEmail}" th:text="${emptyEmail}"/>
+        </div>
+            <p class="alert alert-danger" th:if="${customerAuthorization}" th:text="${customerAuthorization}"/>
+            <p class="alert alert-danger" th:if="${projectNotFinish}" th:text="${projectNotFinish}"/>
+            <p class="alert alert-success" th:if="${successMessage}" th:text="${successMessage}"/>
+            <p class="alert alert-danger" th:if="${errorMessage}" th:text="${errorMessage}"/>
+
+        <div class="row">
+            <button type="submit" class="btn btn-default">Send</button>
+        </div>
+
+    </form>
+</div>
+
+
+<div th:replace="footer :: footer"></div>
+</body>
+<script type="text/javascript" th:src="@{/js/getProjectsByCustomerId.js}"></script>
+</html>

@@ -27,6 +27,15 @@ public interface ReportRepository extends JpaRepository<Task, Long> {
             "AND task.employee_id = :employeeId AND task.dateOfEnd LIKE CONCAT(:date ,'%')")
     Double getTotalWorkHoursPerMonthAndYear(@Param("employeeId") Long employeeId, @Param("date") String date);
 
+    @Query("SELECT new pl.busman.project.model.Task(task.id, task.project_id, task.employee_id, task.title, task.description, task.status, task.neededTime, " +
+            "task.dateOfCreation, task.cost, task.dateOfEnd) FROM Task task WHERE task.project_id= :projectId AND task.status = 'DONE' ")
+    List<Task> getAllDoneTasksByProjectId(@Param("projectId") Long projectId);
+
+    @Query("SELECT new pl.busman.project.model.Task(task.id, task.project_id, task.employee_id, task.title, task.description, task.status, task.neededTime," +
+            " task.dateOfCreation, task.cost, task.dateOfEnd) FROM Task task WHERE task.status != 'DONE' AND task.project_id= :projectId")
+    List<Task> getAllUncompletedTasksByProjectId(@Param("projectId") Long projectId);
 
 
+    @Query("SELECT SUM(task.cost) FROM Task task WHERE task.project_id = :projectId AND task.status = 'DONE'")
+    Double getTotalCostByProjectId(@Param("projectId") Long projectId);
 }

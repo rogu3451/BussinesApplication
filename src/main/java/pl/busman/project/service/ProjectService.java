@@ -27,4 +27,7 @@ public interface ProjectService {
     List<ProjectWithCustomerDetalis> getAllProjectsWithCustomerDetails();
 
     void updateProject(Project project, BindingResult bindingResult, Model model);
+
+    String getProjectNameById(Long projectId);
+
 }
