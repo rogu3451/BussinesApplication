@@ -1,0 +1,68 @@
+# Busman - Application for support management in bussines
+
+
+## Project Requirements
+- Java 8+ version
+- Spring 2.3.5 or higher 
+- PostgreSQL 12 or higher
+
+## Project - Schema
+![](https://github.com/rogu3451/BussinesApplication/blob/main/busmanSchema.jpeg)
+
+## Getting started
+
+1. Clone repo 
+	
+2. Open Starter class that is located here (BussinesApplication/main/src/main/java/pl/busman/project/Starter.java)
+   and uncomment line with function "loadData()". The method creates first users in the system.
+   
+  
+3. Open "application.properties" file that is located here (BussinesApplication/main/src/main/resources/application.properties)
+   Set correct url, username and password for your local datebase. *You have to create them beforehand.	
+   Before first run application you should set "create" property: for "spring.jpa.hibernate.ddl-auto".
+   Set your host, port, username and password for email. *It will be used while sending emails. 	
+   
+   
+   **If you don't want to lose data when you run application next time you should set
+   property "update": for "spring.jpa.hibernate.ddl-auto" and comment line with method "loadData()" otherwise "duplicate key for user" error will occur.
+   
+   
+   
+4. Find class "ProjectApplication" which is located in (BussinesApplication/src/main/java/pl/busman/project/ProjectApplication.java)
+   and run application.
+   By default there are three acounts for ADMIN / EMPLOYEE / CUSTOMER
+   You can log in there with credentials given below:
+   1.ADMIN 
+		Login: admin       Password: Root12
+   2.EMPLOYEE 
+		Login: emlployee   Password: Root12
+   3.CUSTOMER 
+		Login: customer    Password: Root12
+
+## Demo of app
+	http://104.248.27.214:8080/login
+	*You can log in there using the same credentials as given above.
+	
+	
+## Functionalities of system
+	
+	There are three roles in system: ADMIN, EMPLOYEE, CUSTOMER. Each of them has different functionalities.
+	
+	ADMIN 
+	 - can manage users' accounts (basic CRUD operations), but can't delete last admin from system.
+	 - can add new projects for specific customers.
+	 - can add projects' tasks for particular employees, but can't modify tasks after creating them.
+	 
+	EMPLOYEE
+	 - can determine time required for completing task in specific projects.
+	 - can change status of specific task in particular project. There are three statuses (NEW, IN_REALIZATION, DONE)
+	   If employee sets "DONE" status for specific task, date of completing of the task will be set as current date.
+	 - can generate montly report of working hours for specific year. Report is sent to email written in form.
+	 
+	CUSTOMER	
+	 - is able to view all of their projects.
+	 - has an insight into progress for specific projects.
+	 - can generate financial report for particular project on condition that project is completed. Report is sent to email written in form.
+	 
+	 Project has validation for each form. System is secured against SQLInjection.
+

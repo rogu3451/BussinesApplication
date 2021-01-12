@@ -36,9 +36,6 @@ public class EmployeeController {
     TaskValidation taskValidation;
 
     @Autowired
-    EmailSender emailSender;
-
-    @Autowired
     ReportGeneratorService reportGeneratorService;
 
     @GetMapping("/myProjects")
